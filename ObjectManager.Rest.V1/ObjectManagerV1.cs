@@ -1,10 +1,11 @@
-﻿using Relativity.Services.Objects.DataContracts;
+﻿using ObjectManager.Rest.Interfaces;
+using ObjectManager.Rest.Interfaces.Authentication;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ObjectManager.Manager
+namespace ObjectManager.Rest.V1
 {
     internal class ObjectManagerV1 : IObjectManager
     {
