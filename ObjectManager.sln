@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.27428.2011
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ObjectManager.Unit", "ObjectManager.Unit\ObjectManager.Unit.csproj", "{CCA97BA7-2318-44C4-B506-7573105C3099}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ObjectManager.Integration", "ObjectManager.Integration\ObjectManager.Integration.csproj", "{9EA5BCA4-0058-4DC2-B72F-0990FD58CC59}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ObjectManager.Rest.V1.Integration", "ObjectManager.Integration\ObjectManager.Rest.V1.Integration.csproj", "{9EA5BCA4-0058-4DC2-B72F-0990FD58CC59}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ObjectManager.Rest.Interfaces", "ObjectManager.Rest.Interfaces\ObjectManager.Rest.Interfaces.csproj", "{CFE4EBDF-2F4F-4983-99AD-035333627194}"
 EndProject

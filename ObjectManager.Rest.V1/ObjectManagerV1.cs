@@ -1,5 +1,10 @@
 ﻿using ObjectManager.Rest.Interfaces;
 using ObjectManager.Rest.Interfaces.Authentication;
+using ObjectManager.Rest.Interfaces.Extensions;
+using ObjectManager.Rest.Interfaces.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
@@ -26,6 +31,20 @@ namespace ObjectManager.Rest.V1
         public Task<ObjectUpdateResult> UpdateAsync(int workspaceId, RelativityObject obj, CallingContext context)
         {
             return this.UpdateAsync(workspaceId, obj, context, default(CancellationToken));
+        }
+        public async Task<RelativityObject> ReadAsync(int workspaceId, RelativityObject obj, CallingContext context)
+        {
+            _authentication.SetHeaders(_request);
+            var fields = obj?.FieldValues?.Select(x => new FieldRef { ArtifactId = x.ArtifactId, Name = x.Name, Guid = x.Guids.FirstOrDefault() }).ToList();
+            var result = await _request.PostAsJsonAsync($"/Relativity.REST/api/Relativity.Objects/workspaces/{workspaceId}/objects/{obj.ArtifactId}/read", new
+            {
+                fieldRefs = fields ?? new List<FieldRef> { new FieldRef { Name = "Artifact ID" } },
+                CallingContext = context
+            });
+            result.EnsureSuccess();
+            var ret = await result.Content.ReadAsAsync<object>();
+            throw new NotSupportedException();
+            return ret;
         }
 
         public async Task<ObjectUpdateResult> UpdateAsync(int workspaceId, RelativityObject obj, CallingContext context, CancellationToken token)
