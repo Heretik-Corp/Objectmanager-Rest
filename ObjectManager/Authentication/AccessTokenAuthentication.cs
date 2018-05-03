@@ -13,7 +13,6 @@ namespace ObjectManager
             var header = this.GetAuthHeader();
             request.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", header);
             request.DefaultRequestHeaders.Add("X-Kepler-Version", "2.0");
-            throw new System.NotImplementedException();
         }
         private string GetAuthHeader()
         {
