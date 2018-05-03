@@ -11,12 +11,12 @@ namespace ObjectManager.Manager
 
         }
 
-        public Task<ObjectUpdateResult> UpdateAsync(int workspaceId, int objectArtifactId, RelativityObject obj, CallingContext context)
+        public Task<ObjectUpdateResult> UpdateAsync(int workspaceId, RelativityObject obj, CallingContext context)
         {
             throw new System.NotImplementedException();
         }
 
-        public Task<ObjectUpdateResult> UpdateAsync(int workspaceId, int objectArtifactId, RelativityObject obj, CallingContext context, CancellationToken token)
+        public Task<ObjectUpdateResult> UpdateAsync(int workspaceId, RelativityObject obj, CallingContext context, CancellationToken token)
         {
             throw new System.NotImplementedException();
         }

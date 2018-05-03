@@ -20,15 +20,17 @@ namespace ObjectManager.Manager
             _request.BaseAddress = new System.Uri(_host);
             _request.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
-        public Task<ObjectUpdateResult> UpdateAsync(int workspaceId, int objectArtifactId, RelativityObject obj, CallingContext context)
+
+
+        public Task<ObjectUpdateResult> UpdateAsync(int workspaceId, RelativityObject obj, CallingContext context)
         {
-            return this.UpdateAsync(workspaceId, objectArtifactId, obj, context, default(CancellationToken));
+            return this.UpdateAsync(workspaceId, obj, context, default(CancellationToken));
         }
 
-        public async Task<ObjectUpdateResult> UpdateAsync(int workspaceId, int objectArtifactId, RelativityObject obj, CallingContext context, CancellationToken token)
+        public async Task<ObjectUpdateResult> UpdateAsync(int workspaceId, RelativityObject obj, CallingContext context, CancellationToken token)
         {
             _authentication.SetHeaders(_request);
-            var result = await _request.GetAsync($"/Relativity.REST/api/Relativity.Objects/workspaces/{workspaceId}/objects/{objectArtifactId}");
+            var result = await _request.GetAsync($"/Relativity.REST/api/Relativity.Objects/workspaces/{workspaceId}/objects");
             result.EnsureSuccessStatusCode();
             var ret = await result.Content.ReadAsAsync<ObjectUpdateResult>();
             return ret;

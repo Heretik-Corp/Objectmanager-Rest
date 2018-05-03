@@ -18,7 +18,7 @@ namespace ObjectManager
             {
                 return new ObjectManagerV1(host, authentication);
             }
-            else if (version > new System.Version("9.5.411.4"))
+            else if (version >= new System.Version("9.6.50.31"))
             {
                 return new ObjectManagerV2(host, authentication);
             }

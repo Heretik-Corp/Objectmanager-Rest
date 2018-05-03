@@ -6,7 +6,7 @@ namespace ObjectManager.Manager
 {
     public interface IObjectManager
     {
-        Task<ObjectUpdateResult> UpdateAsync(int workspaceId, int objectArtifactId, RelativityObject obj, CallingContext context);
-        Task<ObjectUpdateResult> UpdateAsync(int workspaceId, int objectArtifactId, RelativityObject obj, CallingContext context, CancellationToken token);
+        Task<ObjectUpdateResult> UpdateAsync(int workspaceId, RelativityObject obj, CallingContext context);
+        Task<ObjectUpdateResult> UpdateAsync(int workspaceId, RelativityObject obj, CallingContext context, CancellationToken token);
     }
 }
