@@ -8,8 +8,8 @@
     <ProjectGuid>{9EA5BCA4-0058-4DC2-B72F-0990FD58CC59}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ObjectManager.Integration</RootNamespace>
-    <AssemblyName>ObjectManager.Integration</AssemblyName>
+    <RootNamespace>ObjectManager.Rest.V1.Tests.Integration</RootNamespace>
+    <AssemblyName>ObjectManager.Rest.V1.Tests.Integration</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -176,8 +176,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="TestFixtures\DocumentCreationSetupFixture.cs" />
-    <Compile Include="UnitTest1.cs" />
+    <Compile Include="ConfigHelper.cs" />
+    <Compile Include="Manager\ObjectManagerV1Tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -187,9 +187,7 @@
   <ItemGroup>
     <Analyzer Include="..\packages\xunit.analyzers.0.7.0\analyzers\dotnet\cs\xunit.analyzers.dll" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Manager\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\ObjectManager.Rest.Interfaces\ObjectManager.Rest.Interfaces.csproj">
       <Project>{cfe4ebdf-2f4f-4983-99ad-035333627194}</Project>
@@ -198,6 +196,10 @@
     <ProjectReference Include="..\ObjectManager.Rest.Legacy\ObjectManager.Rest.Legacy.csproj">
       <Project>{b0970ccd-bea1-4dc0-a026-8288d02a8919}</Project>
       <Name>ObjectManager.Rest.Legacy</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ObjectManager.Rest.Tests.Integration.Common\ObjectManager.Rest.Tests.Integration.Common.csproj">
+      <Project>{c92f6ddf-8492-40de-8063-539f9ac8604d}</Project>
+      <Name>ObjectManager.Rest.Tests.Integration.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\ObjectManager.Rest.V1\ObjectManager.Rest.V1.csproj">
       <Project>{d57a182a-bf54-42dd-b17d-6987dac4fa57}</Project>

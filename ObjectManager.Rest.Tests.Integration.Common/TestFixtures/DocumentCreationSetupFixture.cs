@@ -1,12 +1,11 @@
-﻿using kCura.Relativity.Client;
-using kCura.Relativity.Client.DTOs;
+﻿using kCura.Relativity.Client.DTOs;
 using Relativity.API;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace ObjectManager.Integration.TestFixtures
+namespace ObjectManager.Rest.Tests.Integration.Common.TestFixtures
 {
     public class DocumentCreationSetupFixture : IDisposable
     {
