@@ -1,5 +1,6 @@
 ﻿using ObjectManager.Rest.Interfaces;
 using ObjectManager.Rest.Interfaces.Authentication;
+using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
@@ -28,11 +29,12 @@ namespace ObjectManager.Rest.V2
 
         public async Task<ObjectUpdateResult> UpdateAsync(int workspaceId, RelativityObject obj, CallingContext context, CancellationToken token)
         {
-            _authentication.SetHeaders(_request);
-            var result = await _request.GetAsync($"/Relativity.REST/api/Relativity.Objects/workspaces/{workspaceId}/objects/{obj.ArtifactID}");
-            result.EnsureSuccessStatusCode();
-            var ret = await result.Content.ReadAsAsync<ObjectUpdateResult>();
-            return ret;
+            throw new NotImplementedException();
+            //_authentication.SetHeaders(_request);
+            //var result = await _request.GetAsync($"/Relativity.REST/api/Relativity.Objects/workspaces/{workspaceId}/objects/{obj.ArtifactId}");
+            //result.EnsureSuccessStatusCode();
+            //var ret = await result.Content.ReadAsAsync<ObjectUpdateResult>();
+            //return ret;
         }
     }
 }

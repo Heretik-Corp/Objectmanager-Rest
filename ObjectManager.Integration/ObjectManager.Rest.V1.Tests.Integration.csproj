@@ -57,6 +57,9 @@
     <Reference Include="Moq, Version=4.8.0.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
       <HintPath>..\packages\Moq.4.8.2\lib\net45\Moq.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="Relativity.API, Version=9.6.85.9, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Relativity.Api.9.6.85.9\lib\Relativity.API.dll</HintPath>
     </Reference>
@@ -112,8 +115,8 @@
     <Reference Include="System.IO.FileSystem.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.IO.FileSystem.Primitives.4.3.0\lib\net46\System.IO.FileSystem.Primitives.dll</HintPath>
     </Reference>
-    <Reference Include="System.Net.Http, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Net.Http.4.3.0\lib\net46\System.Net.Http.dll</HintPath>
+    <Reference Include="System.Net.Http, Version=4.1.1.2, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Net.Http.4.3.3\lib\net46\System.Net.Http.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Sockets, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Net.Sockets.4.3.0\lib\net46\System.Net.Sockets.dll</HintPath>
@@ -179,6 +182,7 @@
     <Compile Include="ConfigHelper.cs" />
     <Compile Include="Manager\ObjectManagerV1Tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WorkspaceSetupFixture.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -204,10 +208,6 @@
     <ProjectReference Include="..\ObjectManager.Rest.V1\ObjectManager.Rest.V1.csproj">
       <Project>{d57a182a-bf54-42dd-b17d-6987dac4fa57}</Project>
       <Name>ObjectManager.Rest.V1</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ObjectManager.Rest.V2\ObjectManager.Rest.V2.csproj">
-      <Project>{40fddc45-6c9f-4813-88e6-902f44a4a07f}</Project>
-      <Name>ObjectManager.Rest.V2</Name>
     </ProjectReference>
     <ProjectReference Include="..\ObjectManager.Rest\ObjectManager.Rest.csproj">
       <Project>{b668c8f1-84c6-458e-ad35-4494a3af7c1b}</Project>

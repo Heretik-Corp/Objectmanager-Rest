@@ -1,4 +1,5 @@
-﻿using kCura.Relativity.Client.DTOs;
+﻿using kCura.Relativity.Client;
+using kCura.Relativity.Client.DTOs;
 using Relativity.API;
 using System;
 using System.Collections.Generic;

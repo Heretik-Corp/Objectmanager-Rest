@@ -7,5 +7,6 @@ namespace ObjectManager.Rest.Interfaces
     {
         public int ArtifactId { get; set; }
         public IEnumerable<FieldValuePair> FieldValues { get; set; }
+        public IEnumerable<FieldValuePair> FieldValuePairs { get; set; }
     }
 }
