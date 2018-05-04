@@ -3,7 +3,7 @@ using Relativity.Test.Helpers;
 using System;
 using Xunit;
 
-namespace ObjectManager.Rest.V1.Tests.Integration
+namespace ObjectManager.Rest.V2.Tests.Integration
 {
     [CollectionDefinition(CollectionName)]
     public class WorkspaceSetupFixture : ICollectionFixture<WorkspaceSetupFixture>, IDisposable

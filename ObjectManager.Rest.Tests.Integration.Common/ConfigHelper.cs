@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace ObjectManager.Rest.V1.Tests.Integration
+namespace ObjectManager.Rest.Tests.Integration.Common
 {
     public static class ConfigHelper
     {

@@ -11,27 +11,21 @@ using System.Threading.Tasks;
 using Xunit;
 using Xunit.Categories;
 
-namespace ObjectManager.Rest.V1.Tests.Integration.Manager
+namespace ObjectManager.Rest.V2.Tests.Integration
 {
     [IntegrationTest]
     [Collection(WorkspaceSetupFixture.CollectionName)]
-    public class ObjectManagerV1Tests : IDisposable
+    public class ObjectManagerV2Tests : IDisposable
     {
-        private readonly ObjectManagerV1 _manager;
+        private readonly ObjectManagerV2 _manager;
         private readonly WorkspaceSetupFixture _fixture;
         private readonly DocumentCreationSetupFixture _creation;
-        public ObjectManagerV1Tests(WorkspaceSetupFixture fixture)
+        public ObjectManagerV2Tests(WorkspaceSetupFixture fixture)
         {
             _fixture = fixture;
-            _manager = new ObjectManagerV1(_fixture.Helper.GetRestUrl(), new UsernamePasswordAuthentication(ConfigHelper.UserName, ConfigHelper.Password));
+            _manager = new ObjectManagerV2(_fixture.Helper.GetRestUrl(), new UsernamePasswordAuthentication(ConfigHelper.UserName, ConfigHelper.Password));
             _creation = new DocumentCreationSetupFixture(fixture.Helper);
         }
-
-        public void Dispose()
-        {
-            _creation?.Dispose();
-        }
-
         [Fact]
         public async Task ReadAsync_SanityCheck()
         {
@@ -73,6 +67,10 @@ namespace ObjectManager.Rest.V1.Tests.Integration.Manager
 
             //ASSERT
             Assert.All(result.EventHandlerStatuses, (ehs) => Assert.True(ehs.Success));
+        }
+        public void Dispose()
+        {
+            _creation?.Dispose();
         }
     }
 }

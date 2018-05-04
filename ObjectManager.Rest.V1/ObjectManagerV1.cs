@@ -25,11 +25,11 @@ namespace ObjectManager.Rest.V1
             _request.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
-        public Task<ObjectUpdateResult> UpdateAsync(int workspaceId, Interfaces.RelativityObject obj, CallingContext context)
+        public Task<ObjectUpdateResult> UpdateAsync(int workspaceId, RelativityObject obj, CallingContext context)
         {
             return this.UpdateAsync(workspaceId, obj, context, default(CancellationToken));
         }
-        public async Task<ObjectUpdateResult> UpdateAsync(int workspaceId, Interfaces.RelativityObject obj, CallingContext context, CancellationToken token)
+        public async Task<ObjectUpdateResult> UpdateAsync(int workspaceId, RelativityObject obj, CallingContext context, CancellationToken token)
         {
             _authentication.SetHeaders(_request);
             var request = RelativityObjectUpdateRestPrep.PrepareForUpdateRequst(obj);
@@ -42,7 +42,7 @@ namespace ObjectManager.Rest.V1
             var ret = await result.Content.ReadAsAsync<ObjectUpdateResult>();
             return ret;
         }
-        public async Task<Interfaces.RelativityObject> ReadAsync(int workspaceId, Interfaces.RelativityObject obj, CallingContext context)
+        public async Task<RelativityObject> ReadAsync(int workspaceId, RelativityObject obj, CallingContext context)
         {
             _authentication.SetHeaders(_request);
             var request = RelativityObjectRestReadPrep.PrepareForReadRequst(obj, context);

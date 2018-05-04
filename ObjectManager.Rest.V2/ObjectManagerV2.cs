@@ -22,6 +22,12 @@ namespace ObjectManager.Rest.V2
             _request.BaseAddress = new System.Uri(_host);
             _request.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
+
+        public Task<RelativityObject> ReadAsync(int workspaceId, RelativityObject obj, CallingContext context)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<ObjectUpdateResult> UpdateAsync(int workspaceId, RelativityObject obj, CallingContext context)
         {
             return this.UpdateAsync(workspaceId, obj, context, default(CancellationToken));
@@ -29,12 +35,11 @@ namespace ObjectManager.Rest.V2
 
         public async Task<ObjectUpdateResult> UpdateAsync(int workspaceId, RelativityObject obj, CallingContext context, CancellationToken token)
         {
-            throw new NotImplementedException();
-            //_authentication.SetHeaders(_request);
-            //var result = await _request.GetAsync($"/Relativity.REST/api/Relativity.Objects/workspaces/{workspaceId}/objects/{obj.ArtifactId}");
-            //result.EnsureSuccessStatusCode();
-            //var ret = await result.Content.ReadAsAsync<ObjectUpdateResult>();
-            //return ret;
+            _authentication.SetHeaders(_request);
+            var result = await _request.GetAsync($"/Relativity.REST/api/Relativity.Objects/workspaces/{workspaceId}/objects/{obj.ArtifactId}");
+            result.EnsureSuccessStatusCode();
+            var ret = await result.Content.ReadAsAsync<ObjectUpdateResult>();
+            return ret;
         }
     }
 }
