@@ -1,8 +1,8 @@
-﻿using Relativity.Services.Objects.DataContracts;
+﻿using ObjectManager.Rest.Interfaces;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ObjectManager.Manager
+namespace ObjectManager.Rest.Legacy
 {
     internal class RSAPIObjectManager : IObjectManager
     {

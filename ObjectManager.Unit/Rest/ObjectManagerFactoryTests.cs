@@ -1,5 +1,9 @@
 ﻿using Moq;
-using ObjectManager.Manager;
+using ObjectManager.Rest.Interfaces;
+using ObjectManager.Rest.Interfaces.Authentication;
+using ObjectManager.Rest.Legacy;
+using ObjectManager.Rest.V1;
+using ObjectManager.Rest.V2;
 using System;
 using System.Threading.Tasks;
 using Xunit;

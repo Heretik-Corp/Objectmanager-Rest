@@ -1,8 +1,7 @@
-﻿using Relativity.Services.Objects.DataContracts;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace ObjectManager.Manager
+namespace ObjectManager.Rest.Interfaces
 {
     public interface IObjectManager
     {

@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{B668C8F1-84C6-458E-AD35-4494A3AF7C1B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ObjectManager.Rest</RootNamespace>
+    <AssemblyName>ObjectManager.Rest</AssemblyName>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ObjectManagerFactory.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ObjectManager.Rest.Interfaces\ObjectManager.Rest.Interfaces.csproj">
+      <Project>{cfe4ebdf-2f4f-4983-99ad-035333627194}</Project>
+      <Name>ObjectManager.Rest.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ObjectManager.Rest.Legacy\ObjectManager.Rest.Legacy.csproj">
+      <Project>{b0970ccd-bea1-4dc0-a026-8288d02a8919}</Project>
+      <Name>ObjectManager.Rest.Legacy</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ObjectManager.Rest.V1\ObjectManager.Rest.V1.csproj">
+      <Project>{d57a182a-bf54-42dd-b17d-6987dac4fa57}</Project>
+      <Name>ObjectManager.Rest.V1</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ObjectManager.Rest.V2\ObjectManager.Rest.V2.csproj">
+      <Project>{40fddc45-6c9f-4813-88e6-902f44a4a07f}</Project>
+      <Name>ObjectManager.Rest.V2</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

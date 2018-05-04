@@ -4,14 +4,13 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{70EEFF3F-4CC8-4640-BBF0-A68F9752DE9F}</ProjectGuid>
+    <ProjectGuid>{D57A182A-BF54-42DD-B17D-6987DAC4FA57}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ObjectManager</RootNamespace>
-    <AssemblyName>ObjectManager</AssemblyName>
+    <RootNamespace>ObjectManager.Rest.V1</RootNamespace>
+    <AssemblyName>ObjectManager.Rest.V1</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -31,24 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="kCura.Relativity.Client, Version=9.6.85.9, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Relativity.Rsapi.9.6.85.9\lib\kCura.Relativity.Client.dll</HintPath>
-    </Reference>
-    <Reference Include="Relativity.API, Version=9.6.85.9, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Relativity.Api.9.6.85.9\lib\Relativity.API.dll</HintPath>
-    </Reference>
-    <Reference Include="Relativity.Kepler, Version=1.0.1.445, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Relativity.ObjectManager.9.6.85.9\lib\Relativity.Kepler.dll</HintPath>
-    </Reference>
-    <Reference Include="Relativity.Services.DataContracts, Version=9.6.85.9, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Relativity.ObjectManager.9.6.85.9\lib\Relativity.Services.DataContracts.dll</HintPath>
-    </Reference>
-    <Reference Include="Relativity.Services.Interfaces, Version=9.6.85.9, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Relativity.ObjectManager.9.6.85.9\lib\Relativity.Services.Interfaces.dll</HintPath>
-    </Reference>
-    <Reference Include="Relativity.Services.ServiceProxy, Version=1.0.1.392, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Relativity.ObjectManager.9.6.85.9\lib\Relativity.Services.ServiceProxy.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net" />
@@ -64,7 +45,6 @@
     <Reference Include="System.Net.Http.Primitives, Version=4.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Net.Http.Formatting.Extension.5.2.3.0\lib\System.Net.Http.Primitives.dll</HintPath>
     </Reference>
-    <Reference Include="System.Net.Http.WebRequest" />
     <Reference Include="System.Security.Cryptography.Algorithms, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Security.Cryptography.Algorithms.4.3.0\lib\net461\System.Security.Cryptography.Algorithms.dll</HintPath>
     </Reference>
@@ -84,14 +64,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Authentication\AccessTokenAuthentication.cs" />
-    <Compile Include="Authentication\IAuthentication.cs" />
-    <Compile Include="Authentication\UsernamePasswordAuthentication.cs" />
-    <Compile Include="IObjectManagerFactory.cs" />
-    <Compile Include="IRelativityVersionResolver.cs" />
-    <Compile Include="ObjectManagerFactory.cs" />
-    <Compile Include="ObjectUpdateResult.cs" />
+    <Compile Include="Models\ReadResult.cs" />
+    <Compile Include="Models\RelativityObject.cs" />
+    <Compile Include="Models\RelativityObjectRestPrep.cs" />
+    <Compile Include="ObjectManagerV1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ObjectManager.Rest.Interfaces\ObjectManager.Rest.Interfaces.csproj">
+      <Project>{cfe4ebdf-2f4f-4983-99ad-035333627194}</Project>
+      <Name>ObjectManager.Rest.Interfaces</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
