@@ -16,6 +16,11 @@ namespace ObjectManager.Rest.Legacy
             throw new System.NotImplementedException();
         }
 
+        public Task<RelativityObject> ReadAsync(int workspaceId, RelativityObject obj, CallingContext context, CancellationToken token)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public Task<ObjectUpdateResult> UpdateAsync(int workspaceId, RelativityObject obj, CallingContext context)
         {
             throw new System.NotImplementedException();

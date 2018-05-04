@@ -66,11 +66,16 @@
   <ItemGroup>
     <Compile Include="Models\ReadResult.cs" />
     <Compile Include="Models\RelativityObject.cs" />
-    <Compile Include="Models\RelativityObjectRestPrep.cs" />
+    <Compile Include="Models\RelativityObjectRestReadPrep.cs" />
+    <Compile Include="Models\RelativityObjectUpdateRestPrep.cs" />
     <Compile Include="ObjectManagerV1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ObjectManager.Rest.Common\ObjectManager.Rest.Common.csproj">
+      <Project>{11c84e49-2e4d-4b9b-89d2-9a4a8196ef85}</Project>
+      <Name>ObjectManager.Rest.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ObjectManager.Rest.Interfaces\ObjectManager.Rest.Interfaces.csproj">
       <Project>{cfe4ebdf-2f4f-4983-99ad-035333627194}</Project>
       <Name>ObjectManager.Rest.Interfaces</Name>

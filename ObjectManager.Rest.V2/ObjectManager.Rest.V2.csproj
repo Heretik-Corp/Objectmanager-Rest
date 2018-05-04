@@ -131,10 +131,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\ReadResult.cs" />
+    <Compile Include="Models\RelativityObjectRestReadPrep.cs" />
+    <Compile Include="Models\RelativityObjectUpdateRestPrep.cs" />
     <Compile Include="ObjectManagerV2.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ObjectManager.Rest.Common\ObjectManager.Rest.Common.csproj">
+      <Project>{11C84E49-2E4D-4B9B-89D2-9A4A8196EF85}</Project>
+      <Name>ObjectManager.Rest.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ObjectManager.Rest.Interfaces\ObjectManager.Rest.Interfaces.csproj">
       <Project>{cfe4ebdf-2f4f-4983-99ad-035333627194}</Project>
       <Name>ObjectManager.Rest.Interfaces</Name>

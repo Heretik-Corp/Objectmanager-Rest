@@ -287,3 +287,4 @@ __pycache__/
 *.odx.cs
 *.xsd.cs
 /ObjectManager.Integration/config.json
+/ObjectManager.Rest.V2.Tests.Integration/config.json

@@ -42,16 +42,19 @@ namespace ObjectManager.Rest.V1
             var ret = await result.Content.ReadAsAsync<ObjectUpdateResult>();
             return ret;
         }
-        public async Task<RelativityObject> ReadAsync(int workspaceId, RelativityObject obj, CallingContext context)
+        public Task<RelativityObject> ReadAsync(int workspaceId, RelativityObject obj, CallingContext context)
+        {
+            return this.ReadAsync(workspaceId, obj, context, default(CancellationToken));
+        }
+
+        public async Task<RelativityObject> ReadAsync(int workspaceId, RelativityObject obj, CallingContext context, CancellationToken token)
         {
             _authentication.SetHeaders(_request);
             var request = RelativityObjectRestReadPrep.PrepareForReadRequst(obj, context);
-            var result = await _request.PostAsJsonAsync($"{BASE_PATH}/{workspaceId}/objects/{obj.ArtifactId}/read", request);
+            var result = await _request.PostAsJsonAsync($"{BASE_PATH}/{workspaceId}/objects/{obj.ArtifactId}/read", request, token);
             result.EnsureSuccess();
             var ret = await result.Content.ReadAsAsync<ReadResult>();
             return ret.RelativityObject.ToCoreModel();
         }
-
-
     }
 }

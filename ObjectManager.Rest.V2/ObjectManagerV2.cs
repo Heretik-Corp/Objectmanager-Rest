@@ -1,6 +1,7 @@
 ﻿using ObjectManager.Rest.Interfaces;
 using ObjectManager.Rest.Interfaces.Authentication;
-using System;
+using ObjectManager.Rest.Interfaces.Extensions;
+using ObjectManager.Rest.V2.Models;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
@@ -25,7 +26,17 @@ namespace ObjectManager.Rest.V2
 
         public Task<RelativityObject> ReadAsync(int workspaceId, RelativityObject obj, CallingContext context)
         {
-            throw new NotImplementedException();
+            return this.ReadAsync(workspaceId, obj, context, default(CancellationToken));
+        }
+
+        public async Task<RelativityObject> ReadAsync(int workspaceId, RelativityObject obj, CallingContext context, CancellationToken token)
+        {
+            _authentication.SetHeaders(_request);
+            var request = RelativityObjectRestReadPrep.Prep(obj);
+            var result = await _request.PostAsJsonAsync($"/Relativity.REST/api/Relativity.Objects/workspace/{workspaceId}/object/read", request, token);
+            result.EnsureSuccess();
+            var ret = await result.Content.ReadAsAsync<ReadResult>();
+            return ret.Object;
         }
 
         public Task<ObjectUpdateResult> UpdateAsync(int workspaceId, RelativityObject obj, CallingContext context)
@@ -36,8 +47,9 @@ namespace ObjectManager.Rest.V2
         public async Task<ObjectUpdateResult> UpdateAsync(int workspaceId, RelativityObject obj, CallingContext context, CancellationToken token)
         {
             _authentication.SetHeaders(_request);
-            var result = await _request.GetAsync($"/Relativity.REST/api/Relativity.Objects/workspaces/{workspaceId}/objects/{obj.ArtifactId}");
-            result.EnsureSuccessStatusCode();
+            var request = RelativityObjectUpdateRestPrep.Prep(obj);
+            var result = await _request.PostAsJsonAsync($"/Relativity.REST/api/Relativity.Objects/workspace/{workspaceId}/object/update", request, token);
+            result.EnsureSuccess();
             var ret = await result.Content.ReadAsAsync<ObjectUpdateResult>();
             return ret;
         }
