@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using Xunit;
 using Xunit.Categories;
 
-namespace ObjectManager.Unit
+namespace ObjectManager.Rest.Tests.Unit
 {
     [UnitTest]
     public class ObjectManagerFactoryTests

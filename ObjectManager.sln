@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27428.2011
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ObjectManager.Rest.Unit", "ObjectManager.Unit\ObjectManager.Rest.Unit.csproj", "{CCA97BA7-2318-44C4-B506-7573105C3099}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ObjectManager.Rest.Tests.Unit", "ObjectManager.Unit\ObjectManager.Rest.Tests.Unit.csproj", "{CCA97BA7-2318-44C4-B506-7573105C3099}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ObjectManager.Rest.V1.Tests.Integration", "ObjectManager.Integration\ObjectManager.Rest.V1.Tests.Integration.csproj", "{9EA5BCA4-0058-4DC2-B72F-0990FD58CC59}"
 EndProject
