@@ -1,10 +1,7 @@
 ﻿using ObjectManager.Rest.Interfaces;
 using ObjectManager.Rest.Interfaces.Authentication;
 using ObjectManager.Rest.Interfaces.Extensions;
-using ObjectManager.Rest.Interfaces.Models;
 using ObjectManager.Rest.V1.Models;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
@@ -14,6 +11,7 @@ namespace ObjectManager.Rest.V1
 {
     internal class ObjectManagerV1 : IObjectManager
     {
+        private const string BASE_PATH = "/Relativity.REST/api/Relativity.Objects/workspaces";
         private readonly IAuthentication _authentication;
         private readonly string _host;
         private readonly HttpClient _request;
@@ -27,32 +25,33 @@ namespace ObjectManager.Rest.V1
             _request.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
-
-        public Task<ObjectUpdateResult> UpdateAsync(int workspaceId, RelativityObject obj, CallingContext context)
+        public Task<ObjectUpdateResult> UpdateAsync(int workspaceId, Interfaces.RelativityObject obj, CallingContext context)
         {
             return this.UpdateAsync(workspaceId, obj, context, default(CancellationToken));
         }
-        public async Task<RelativityObject> ReadAsync(int workspaceId, RelativityObject obj, CallingContext context)
+        public async Task<ObjectUpdateResult> UpdateAsync(int workspaceId, Interfaces.RelativityObject obj, CallingContext context, CancellationToken token)
         {
             _authentication.SetHeaders(_request);
-            var fields = obj?.FieldValues?.Select(x => new FieldRef { ArtifactId = x.Field.ArtifactId, Name = x.Field.Name, Guid = x.Field.Guids.FirstOrDefault() }).ToList();
-            var result = await _request.PostAsJsonAsync($"/Relativity.REST/api/Relativity.Objects/workspaces/{workspaceId}/objects/{obj.ArtifactId}/read", new
+            var request = RelativityObjectUpdateRestPrep.PrepareForUpdateRequst(obj);
+            var result = await _request.PostAsJsonAsync($"{BASE_PATH}/{workspaceId}/objects/{obj.ArtifactId}", new
             {
-                fieldRefs = fields ?? new List<FieldRef> { new FieldRef { Name = "Artifact ID" } },
+                RelativityObject = request,
                 CallingContext = context
-            });
-            result.EnsureSuccess();
-            var ret = await result.Content.ReadAsAsync<ReadResult>();
-            return ret.RelativityObject;
-        }
-
-        public async Task<ObjectUpdateResult> UpdateAsync(int workspaceId, RelativityObject obj, CallingContext context, CancellationToken token)
-        {
-            _authentication.SetHeaders(_request);
-            var result = await _request.GetAsync($"/Relativity.REST/api/Relativity.Objects/workspaces/{workspaceId}/objects");
+            }, token);
             result.EnsureSuccessStatusCode();
             var ret = await result.Content.ReadAsAsync<ObjectUpdateResult>();
             return ret;
         }
+        public async Task<Interfaces.RelativityObject> ReadAsync(int workspaceId, Interfaces.RelativityObject obj, CallingContext context)
+        {
+            _authentication.SetHeaders(_request);
+            var request = RelativityObjectRestReadPrep.PrepareForReadRequst(obj, context);
+            var result = await _request.PostAsJsonAsync($"{BASE_PATH}/{workspaceId}/objects/{obj.ArtifactId}/read", request);
+            result.EnsureSuccess();
+            var ret = await result.Content.ReadAsAsync<ReadResult>();
+            return ret.RelativityObject.ToCoreModel();
+        }
+
+
     }
 }

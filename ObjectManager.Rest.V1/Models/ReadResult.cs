@@ -1,9 +1,7 @@
-﻿using ObjectManager.Rest.Interfaces;
-
-namespace ObjectManager.Rest.V1.Models
+﻿namespace ObjectManager.Rest.V1.Models
 {
-    public class ReadResult
+    internal class ReadResult
     {
-        public RelativityObject RelativityObject { get; set; }
+        public RelativityObjectV1 RelativityObject { get; set; }
     }
 }

@@ -44,6 +44,7 @@
     <Compile Include="Authentication\IAuthentication.cs" />
     <Compile Include="Authentication\UsernamePasswordAuthentication.cs" />
     <Compile Include="CallingContext.cs" />
+    <Compile Include="Extensions\FieldValuePairExtensions.cs" />
     <Compile Include="Extensions\HttpResponseMessageExtensions.cs" />
     <Compile Include="Models\FieldRef.cs" />
     <Compile Include="Models\FieldValuePair.cs" />
