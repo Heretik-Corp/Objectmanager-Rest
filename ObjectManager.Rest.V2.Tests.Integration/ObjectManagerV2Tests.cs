@@ -22,7 +22,11 @@ namespace ObjectManager.Rest.V2.Tests.Integration
         private readonly WorkspaceSetupFixture _fixture;
         private readonly DocumentCreationSetupFixture _creation;
         private readonly InstallApplicationSetupFixture _installFixture;
-        private static DateTime DateUnderTest = DateTime.Parse(DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss"));
+
+        public static IEnumerable<object[]> FieldTestData
+        {
+            get { return DocumentFieldDefinitions.FieldTestData; }
+        }
 
 
         public ObjectManagerV2Tests(WorkspaceSetupFixture fixture, InstallApplicationSetupFixture installFixture)
@@ -52,44 +56,11 @@ namespace ObjectManager.Rest.V2.Tests.Integration
             Assert.Equal(_creation.DocIds.Single(), result["Artifact Id"].ValueAsWholeNumber());
         }
 
-        [Fact]
-        public async Task UpdateAsync_SanityCheck()
-        {
-            //ARRANGE
-            _creation.Create(_fixture.WorkspaceId, 1);
-
-            //ACT
-            var result = await _manager.UpdateAsync(_fixture.WorkspaceId, new Interfaces.RelativityObject
-            {
-                ArtifactId = _creation.DocIds.Single(),
-                FieldValues = new List<FieldValuePair>
-                {
-                    new FieldValuePair{
-                        Field =new FieldRef {
-                            Name = "MD5 Hash",
-                        },
-                        Value = "hello world"
-                    }
-                }
-            }, null);
-
-            //ASSERT
-            Assert.All(result.EventHandlerStatuses, (ehs) => Assert.True(ehs.Success));
-        }
-
         #endregion
 
         #region UpdateByGuid
         [Theory]
-        [InlineData(DocumentFieldDefinitions.FixedLength, "hello world", "hello world")]
-        [InlineData(DocumentFieldDefinitions.LongText, "hello world", "hello world")]
-        [InlineData(DocumentFieldDefinitions.Currency, "5,025.30", 5025.30)]
-        [InlineData(DocumentFieldDefinitions.Decimal, "1.05", 1.05)]
-        [InlineData(DocumentFieldDefinitions.WholeNumber, "1", 1L)]
-        [InlineData(DocumentFieldDefinitions.YesNo, true, true)]
-        //[InlineData(DocumentFieldDefinitions.SingleChoice, "true")]
-        //[InlineData(DocumentFieldDefinitions.Multichoice, "true")]
-
+        [MemberData(nameof(FieldTestData))]
         public async Task UpdateAsync_UpdateFieldByGuid_ReturnsSuccess(string fieldGuidString, object value, object expected)
         {
             //ARRANGE
@@ -121,27 +92,12 @@ namespace ObjectManager.Rest.V2.Tests.Integration
             Assert.Equal(expected, result[fieldGuid].Value);
 
         }
-
-
-        [Fact]
-        public Task UpdateAsync_UpdateDateFieldByGuid_ReturnsSuccess()
-        {
-            return this.UpdateAsync_UpdateFieldByGuid_ReturnsSuccess(DocumentFieldDefinitions.Date, DateUnderTest, DateUnderTest);
-        }
-
         #endregion
 
         #region UpdateFieldByArtifactId
 
         [Theory]
-        [InlineData(DocumentFieldDefinitions.FixedLength, "hello world", "hello world")]
-        [InlineData(DocumentFieldDefinitions.LongText, "hello world", "hello world")]
-        [InlineData(DocumentFieldDefinitions.Currency, "5,025.30", 5025.30)]
-        [InlineData(DocumentFieldDefinitions.Decimal, "1.05", 1.05)]
-        [InlineData(DocumentFieldDefinitions.WholeNumber, "1", 1L)]
-        [InlineData(DocumentFieldDefinitions.YesNo, true, true)]
-        //[InlineData(DocumentFieldDefinitions.SingleChoice, "true")]
-        //[InlineData(DocumentFieldDefinitions.Multichoice, "true")]
+        [MemberData(nameof(FieldTestData))]
 
         public async Task UpdateAsync_UpdateFieldByArtifactId_ReturnsSuccess(string fieldGuidString, object value, object expected)
         {
@@ -176,29 +132,15 @@ namespace ObjectManager.Rest.V2.Tests.Integration
             Assert.True(uResult.EventHandlerStatuses.All(x => x.Success));
             Assert.Equal(_creation.DocIds.Single(), result.ArtifactId);
             Assert.Contains(result.FieldValues, (f) => f.Field.ArtifactId == field.ArtifactID);
-            Assert.Equal(expected, result[fieldGuid].Value);
+            Assert.Equal(expected, result[field.ArtifactID].Value);
 
         }
 
         #endregion
 
         #region UpdateByName
-        [Fact]
-        public Task UpdateAsync_UpdateDateFieldByArtifactId_ReturnsSuccess()
-        {
-            return this.UpdateAsync_UpdateFieldByArtifactId_ReturnsSuccess(DocumentFieldDefinitions.Date, DateUnderTest, DateUnderTest);
-        }
-
         [Theory]
-        [InlineData(DocumentFieldDefinitions.FixedLength, "hello world", "hello world")]
-        [InlineData(DocumentFieldDefinitions.LongText, "hello world", "hello world")]
-        [InlineData(DocumentFieldDefinitions.Currency, "5,025.30", 5025.30)]
-        [InlineData(DocumentFieldDefinitions.Decimal, "1.05", 1.05)]
-        [InlineData(DocumentFieldDefinitions.WholeNumber, "1", 1L)]
-        [InlineData(DocumentFieldDefinitions.YesNo, true, true)]
-        //[InlineData(DocumentFieldDefinitions.Date, "5,025.30")]
-        //[InlineData(DocumentFieldDefinitions.SingleChoice, "true")]
-        //[InlineData(DocumentFieldDefinitions.Multichoice, "true")]
+        [MemberData(nameof(FieldTestData))]
 
         public async Task UpdateAsync_UpdateFieldByName_ReturnsSuccess(string fieldGuidString, object value, object expected)
         {
@@ -231,15 +173,10 @@ namespace ObjectManager.Rest.V2.Tests.Integration
             Assert.True(uResult.EventHandlerStatuses.All(x => x.Success));
             Assert.Equal(_creation.DocIds.Single(), result.ArtifactId);
             Assert.Contains(result.FieldValues, (f) => f.Field.Name == field.Name);
-            Assert.Equal(expected, result[fieldGuid].Value);
+            Assert.Equal(expected, result[field.Name].Value);
 
         }
 
-        [Fact]
-        public Task UpdateAsync_UpdateDateFieldByName_ReturnsSuccess()
-        {
-            return this.UpdateAsync_UpdateFieldByName_ReturnsSuccess(DocumentFieldDefinitions.Date, DateUnderTest, DateUnderTest);
-        }
         #endregion
 
         public void Dispose()

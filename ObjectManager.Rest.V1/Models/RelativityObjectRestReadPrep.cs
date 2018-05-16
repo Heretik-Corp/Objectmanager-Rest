@@ -13,9 +13,10 @@ namespace ObjectManager.Rest.V1.Models
 
         public static RelativityObjectRestReadPrep PrepareForReadRequst(Interfaces.RelativityObject obj, CallingContext context)
         {
+            var parser = new RestV1Parser();
             var ret = new RelativityObjectRestReadPrep();
-            var fields = obj?.FieldValues?.Where(x => x.Field != null).Select(x => RestFieldHelpers.Parse(x.Field)).ToList();
-            ret.FieldRefs = fields ?? new List<object> { new NameRestField("Artifact Id") };
+            var fields = obj?.FieldValues?.Where(x => x.Field != null).Select(x => parser.Parse(x.Field)).ToList();
+            ret.FieldRefs = fields ?? new List<RField> { new NameRestField("Artifact Id") };
             ret.CallingContext = context;
             return ret;
         }

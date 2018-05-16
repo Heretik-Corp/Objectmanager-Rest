@@ -24,11 +24,12 @@ namespace ObjectManager.Rest.V2.Models
 
         public static RelativityObjectRestReadPrep Prep(RelativityObject obj)
         {
+            var parser = new RestFieldParser();
             var ret = new RelativityObjectRestReadPrep();
             ret.Request = new RequestObj();
             ret.Request.Object = new RestObject(obj.ArtifactId);
-            var fields = obj?.FieldValues?.Where(x => x.Field != null).Select(x => RestFieldHelpers.Parse(x.Field)).ToList();
-            ret.Request.Fields = fields ?? new List<object> { new NameRestField("Artifact Id") };
+            var fields = obj?.FieldValues?.Where(x => x.Field != null).Select(x => parser.Parse(x.Field)).ToList();
+            ret.Request.Fields = fields ?? new List<RField> { new NameRestField("Artifact Id") };
             return ret;
         }
     }

@@ -11,9 +11,10 @@ namespace ObjectManager.Rest.V1.Models
 
         public static RelativityObjectUpdateRestPrep PrepareForUpdateRequst(Interfaces.RelativityObject obj)
         {
+            var parser = new RestV1Parser();
             var ret = new RelativityObjectUpdateRestPrep();
             ret.ArtifactId = obj.ArtifactId.ToString();
-            var fields = obj?.FieldValues?.Where(x => x.Field != null).Select(x => RestField.FromFieldRef(x.Field, x.Value)).ToList();
+            var fields = obj?.FieldValues?.Where(x => x.Field != null).Select(x => RestField.FromFieldRef(x.Field, x.Value, parser)).ToList();
             ret.FieldValuePairs = fields; //?? new List<RestField> { new NameRestField("Artifact ID") };
             return ret;
         }

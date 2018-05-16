@@ -23,7 +23,7 @@ namespace ObjectManager.Rest.Legacy
         public Task<RelativityObject> ReadAsync(int workspaceId, RelativityObject obj, CallingContext context, CancellationToken token)
         {
             //TODO: manage repo based on objectType
-            using (var client = _helper.GetServicesManager().CreateProxy<IRSAPIClient>(ExecutionIdentity.System))
+            using (var client = _helper.GetServicesManager().CreateProxy<IRSAPIClient>(ExecutionIdentity.CurrentUser))
             {
                 client.APIOptions.WorkspaceID = workspaceId;
                 var result = client.Repositories.Document.ReadSingle(obj.ArtifactId);

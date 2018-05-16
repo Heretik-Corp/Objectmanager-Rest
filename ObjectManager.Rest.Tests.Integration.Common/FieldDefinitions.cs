@@ -1,4 +1,7 @@
-﻿namespace ObjectManager.Rest.Tests.Integration.Common
+﻿using System;
+using System.Collections.Generic;
+
+namespace ObjectManager.Rest.Tests.Integration.Common
 {
     public class DocumentFieldDefinitions
     {
@@ -11,5 +14,27 @@
         public const string YesNo = "1EE3A20E-F2A9-4233-8C81-5D399A0CFF8C";
         public const string SingleChoice = "CFE7ADBC-4B30-4975-928D-2D9779743BCD";
         public const string Multichoice = "72FDCAFC-1ABA-4E79-8D8B-EB1FB553E413";
+
+        public static IEnumerable<object[]> FieldTestData
+        {
+            get
+            {
+                var dateUnderTest = DateTime.Parse(DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss"));
+
+                return new[]
+                {
+                    new object []{DocumentFieldDefinitions.FixedLength, "hello world", "hello world"},
+                    new object []{DocumentFieldDefinitions.LongText, "hello world", "hello world"},
+                    new object []{DocumentFieldDefinitions.Currency, "5,025.30", 5025.30},
+                    new object []{DocumentFieldDefinitions.Decimal, "1.05", 1.05},
+                    new object []{DocumentFieldDefinitions.WholeNumber, "1", 1L},
+                    new object []{DocumentFieldDefinitions.YesNo, true, true},
+                    new object []{DocumentFieldDefinitions.Date, dateUnderTest, dateUnderTest},
+                };
+            }
+
+        }
     }
+
+
 }

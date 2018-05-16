@@ -7,10 +7,10 @@ namespace ObjectManager.Rest.Common
     {
         public object Value { get; set; }
         public object Field { get; set; }
-        public static RestField FromFieldRef(FieldRef field, object value)
+        public static RestField FromFieldRef(FieldRef field, object value, RestFieldParser parser)
         {
             var restField = new RestField();
-            restField.Field = GetField(field);
+            restField.Field = parser.Parse(field);
             if (value is DateTime)
             {
                 value = ((DateTime)value).ToString("yyyy-MM-ddTHH:mm:ss.ffZ");
@@ -18,10 +18,6 @@ namespace ObjectManager.Rest.Common
             restField.Value = value;
             return restField;
 
-        }
-        public static object GetField(FieldRef field)
-        {
-            return RestFieldHelpers.Parse(field);
         }
     }
 }
