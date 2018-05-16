@@ -25,8 +25,8 @@ namespace ObjectManager.Rest.Common
     }
     internal class ArtifactIdRestField
     {
-        public ArtifactIdRestField(int artifactId) => this.ArtifactId = artifactId;
-        public int ArtifactId { get; set; }
+        public ArtifactIdRestField(int artifactId) => this.ArtifactID = artifactId;
+        public int ArtifactID { get; set; }
     }
 
     internal class NameRestField

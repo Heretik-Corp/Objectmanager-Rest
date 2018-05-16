@@ -1,4 +1,5 @@
 ﻿using ObjectManager.Rest.Interfaces.Models;
+using System;
 
 namespace ObjectManager.Rest.Common
 {
@@ -10,6 +11,10 @@ namespace ObjectManager.Rest.Common
         {
             var restField = new RestField();
             restField.Field = GetField(field);
+            if (value is DateTime)
+            {
+                value = ((DateTime)value).ToString("yyyy-MM-ddTHH:mm:ss.ffZ");
+            }
             restField.Value = value;
             return restField;
 

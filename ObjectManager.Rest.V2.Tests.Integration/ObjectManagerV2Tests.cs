@@ -22,6 +22,8 @@ namespace ObjectManager.Rest.V2.Tests.Integration
         private readonly WorkspaceSetupFixture _fixture;
         private readonly DocumentCreationSetupFixture _creation;
         private readonly InstallApplicationSetupFixture _installFixture;
+        private static DateTime DateUnderTest = DateTime.Parse(DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss"));
+
 
         public ObjectManagerV2Tests(WorkspaceSetupFixture fixture, InstallApplicationSetupFixture installFixture)
         {
@@ -30,6 +32,8 @@ namespace ObjectManager.Rest.V2.Tests.Integration
             _creation = new DocumentCreationSetupFixture(fixture.Helper);
             _installFixture = installFixture;
         }
+
+        #region SanityChecks
         [Fact]
         public async Task ReadAsync_SanityCheck()
         {
@@ -73,6 +77,9 @@ namespace ObjectManager.Rest.V2.Tests.Integration
             Assert.All(result.EventHandlerStatuses, (ehs) => Assert.True(ehs.Success));
         }
 
+        #endregion
+
+        #region UpdateByGuid
         [Theory]
         [InlineData(DocumentFieldDefinitions.FixedLength, "hello world", "hello world")]
         [InlineData(DocumentFieldDefinitions.LongText, "hello world", "hello world")]
@@ -80,7 +87,6 @@ namespace ObjectManager.Rest.V2.Tests.Integration
         [InlineData(DocumentFieldDefinitions.Decimal, "1.05", 1.05)]
         [InlineData(DocumentFieldDefinitions.WholeNumber, "1", 1L)]
         [InlineData(DocumentFieldDefinitions.YesNo, true, true)]
-        //[InlineData(DocumentFieldDefinitions.Date, "5,025.30")]
         //[InlineData(DocumentFieldDefinitions.SingleChoice, "true")]
         //[InlineData(DocumentFieldDefinitions.Multichoice, "true")]
 
@@ -116,6 +122,17 @@ namespace ObjectManager.Rest.V2.Tests.Integration
 
         }
 
+
+        [Fact]
+        public Task UpdateAsync_UpdateDateFieldByGuid_ReturnsSuccess()
+        {
+            return this.UpdateAsync_UpdateFieldByGuid_ReturnsSuccess(DocumentFieldDefinitions.Date, DateUnderTest, DateUnderTest);
+        }
+
+        #endregion
+
+        #region UpdateFieldByArtifactId
+
         [Theory]
         [InlineData(DocumentFieldDefinitions.FixedLength, "hello world", "hello world")]
         [InlineData(DocumentFieldDefinitions.LongText, "hello world", "hello world")]
@@ -123,12 +140,13 @@ namespace ObjectManager.Rest.V2.Tests.Integration
         [InlineData(DocumentFieldDefinitions.Decimal, "1.05", 1.05)]
         [InlineData(DocumentFieldDefinitions.WholeNumber, "1", 1L)]
         [InlineData(DocumentFieldDefinitions.YesNo, true, true)]
-        //[InlineData(DocumentFieldDefinitions.Date, "5,025.30")]
         //[InlineData(DocumentFieldDefinitions.SingleChoice, "true")]
         //[InlineData(DocumentFieldDefinitions.Multichoice, "true")]
 
         public async Task UpdateAsync_UpdateFieldByArtifactId_ReturnsSuccess(string fieldGuidString, object value, object expected)
         {
+
+            //DateTime.Now
             //ARRANGE
             _creation.Create(_fixture.WorkspaceId, 1);
             _installFixture.Init(_fixture.WorkspaceId, ApplicationInstallContext.FieldTestPath);
@@ -146,7 +164,7 @@ namespace ObjectManager.Rest.V2.Tests.Integration
                     new FieldValuePair
                     {
                         Field = new FieldRef(field.ArtifactID),
-                        Value = value.ToString()
+                        Value = value
                     }
                 }
             };
@@ -157,9 +175,18 @@ namespace ObjectManager.Rest.V2.Tests.Integration
             //ASSERT
             Assert.True(uResult.EventHandlerStatuses.All(x => x.Success));
             Assert.Equal(_creation.DocIds.Single(), result.ArtifactId);
-            Assert.Contains(result.FieldValues, (f) => f.Field.Guids.Contains(fieldGuid));
+            Assert.Contains(result.FieldValues, (f) => f.Field.ArtifactId == field.ArtifactID);
             Assert.Equal(expected, result[fieldGuid].Value);
 
+        }
+
+        #endregion
+
+        #region UpdateByName
+        [Fact]
+        public Task UpdateAsync_UpdateDateFieldByArtifactId_ReturnsSuccess()
+        {
+            return this.UpdateAsync_UpdateFieldByArtifactId_ReturnsSuccess(DocumentFieldDefinitions.Date, DateUnderTest, DateUnderTest);
         }
 
         [Theory]
@@ -192,7 +219,7 @@ namespace ObjectManager.Rest.V2.Tests.Integration
                     new FieldValuePair
                     {
                         Field = new FieldRef(field.Name),
-                        Value = value.ToString()
+                        Value = value
                     }
                 }
             };
@@ -203,10 +230,18 @@ namespace ObjectManager.Rest.V2.Tests.Integration
             //ASSERT
             Assert.True(uResult.EventHandlerStatuses.All(x => x.Success));
             Assert.Equal(_creation.DocIds.Single(), result.ArtifactId);
-            Assert.Contains(result.FieldValues, (f) => f.Field.Guids.Contains(fieldGuid));
+            Assert.Contains(result.FieldValues, (f) => f.Field.Name == field.Name);
             Assert.Equal(expected, result[fieldGuid].Value);
 
         }
+
+        [Fact]
+        public Task UpdateAsync_UpdateDateFieldByName_ReturnsSuccess()
+        {
+            return this.UpdateAsync_UpdateFieldByName_ReturnsSuccess(DocumentFieldDefinitions.Date, DateUnderTest, DateUnderTest);
+        }
+        #endregion
+
         public void Dispose()
         {
             _creation?.Dispose();
