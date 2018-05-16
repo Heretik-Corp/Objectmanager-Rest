@@ -2,7 +2,7 @@
 
 namespace ObjectManager.Rest.Tests.Integration.Common.TestFixtures
 {
-    public class WorkspaceSetupFixture
+    public class WorkspaceSetupFixtureHelper
     {
         public const string CollectionName = "Workspace Collection";
         public int WorkspaceId { get; private set; }

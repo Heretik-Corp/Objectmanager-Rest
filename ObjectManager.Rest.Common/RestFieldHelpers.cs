@@ -38,6 +38,8 @@ namespace ObjectManager.Rest.Common
     internal class GuidRestField
     {
         public GuidRestField(Guid g) => this.Guid = g;
+        public int ArtifactId { get; } = 0;
         public Guid Guid { get; set; }
+        public int ViewFieldID { get; } = 0;
     }
 }

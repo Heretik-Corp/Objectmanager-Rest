@@ -3,6 +3,6 @@
     public class FieldValuePair
     {
         public FieldRef Field { get; set; }
-        public string Value { get; set; }
+        public object Value { get; set; }
     }
 }

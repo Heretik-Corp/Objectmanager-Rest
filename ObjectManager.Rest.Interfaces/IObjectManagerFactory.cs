@@ -5,6 +5,6 @@ namespace ObjectManager.Rest.Interfaces
 {
     public interface IObjectManagerFactory
     {
-        Task<IObjectManager> GetObjectManagerAsync(string host, IAuthentication authentication);
+        Task<IObjectManager> GetObjectManagerAsync(IAuthentication authentication);
     }
 }

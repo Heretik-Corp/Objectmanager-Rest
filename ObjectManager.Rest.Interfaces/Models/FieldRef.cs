@@ -10,5 +10,24 @@ namespace ObjectManager.Rest.Interfaces.Models
         public int ViewFieldId { get; set; }
         public IEnumerable<Guid> Guids { get; set; } = new List<Guid>();
         public string Name { get; set; }
+
+        public FieldRef() { }
+        public FieldRef(string fieldName)
+        {
+            this.Name = fieldName;
+        }
+
+        public FieldRef(Guid fieldGuid)
+        {
+            this.Guids = new List<Guid>
+            {
+                fieldGuid
+            };
+        }
+
+        public FieldRef(int artifactId)
+        {
+            this.ArtifactId = artifactId;
+        }
     }
 }

@@ -8,6 +8,7 @@ namespace ObjectManager.Rest.Interfaces.Extensions
         {
             if (!message.IsSuccessStatusCode)
             {
+                throw new System.Exception(message.Content.ReadAsStringAsync().Result);
                 //TODO parse message
             }
         }

@@ -1,4 +1,5 @@
-﻿using Relativity.API;
+﻿using ObjectManager.Rest.Tests.Integration.Common.TestFixtures;
+using Relativity.API;
 using Relativity.Test.Helpers;
 using System;
 using Xunit;
@@ -22,12 +23,12 @@ namespace ObjectManager.Rest.V1.Tests.Integration
         {
             var helper = new TestHelper();
             this.Helper = helper;
-            this.WorkspaceId = ObjectManager.Rest.Tests.Integration.Common.TestFixtures.WorkspaceSetupFixture.SetupEnvironment(helper, _workspaceName);
+            this.WorkspaceId = WorkspaceSetupFixtureHelper.SetupEnvironment(helper, _workspaceName);
         }
 
         public void Dispose()
         {
-            ObjectManager.Rest.Tests.Integration.Common.TestFixtures.WorkspaceSetupFixture.TearDown(this.WorkspaceId, this.Helper);
+            WorkspaceSetupFixtureHelper.TearDown(this.WorkspaceId, this.Helper);
         }
     }
 }

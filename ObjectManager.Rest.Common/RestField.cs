@@ -4,9 +4,9 @@ namespace ObjectManager.Rest.Common
 {
     internal class RestField
     {
-        public string Value { get; set; }
+        public object Value { get; set; }
         public object Field { get; set; }
-        public static RestField FromFieldRef(FieldRef field, string value)
+        public static RestField FromFieldRef(FieldRef field, object value)
         {
             var restField = new RestField();
             restField.Field = GetField(field);

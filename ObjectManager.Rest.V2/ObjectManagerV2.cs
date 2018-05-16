@@ -22,6 +22,7 @@ namespace ObjectManager.Rest.V2
             _request = new HttpClient();
             _request.BaseAddress = new System.Uri(_host);
             _request.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            _authentication.SetHeaders(_request);
         }
 
         public Task<RelativityObject> ReadAsync(int workspaceId, RelativityObject obj, CallingContext context)
@@ -31,7 +32,6 @@ namespace ObjectManager.Rest.V2
 
         public async Task<RelativityObject> ReadAsync(int workspaceId, RelativityObject obj, CallingContext context, CancellationToken token)
         {
-            _authentication.SetHeaders(_request);
             var request = RelativityObjectRestReadPrep.Prep(obj);
             var result = await _request.PostAsJsonAsync($"/Relativity.REST/api/Relativity.Objects/workspace/{workspaceId}/object/read", request, token);
             result.EnsureSuccess();
@@ -46,7 +46,6 @@ namespace ObjectManager.Rest.V2
 
         public async Task<ObjectUpdateResult> UpdateAsync(int workspaceId, RelativityObject obj, CallingContext context, CancellationToken token)
         {
-            _authentication.SetHeaders(_request);
             var request = RelativityObjectUpdateRestPrep.Prep(obj);
             var result = await _request.PostAsJsonAsync($"/Relativity.REST/api/Relativity.Objects/workspace/{workspaceId}/object/update", request, token);
             result.EnsureSuccess();
