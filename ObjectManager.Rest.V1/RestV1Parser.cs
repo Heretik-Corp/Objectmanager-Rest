@@ -1,5 +1,4 @@
-﻿using ObjectManager.Rest.Common;
-using ObjectManager.Rest.Interfaces.Models;
+﻿using ObjectManager.Rest.Interfaces.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +12,14 @@ namespace ObjectManager.Rest.V1
             return new GuidRestField(field.Guids.ToList());
         }
 
+        protected override RChoice ParseChoice(ChoiceRef choiceRef)
+        {
+            if (choiceRef.Guids?.Any() ?? false)
+            {
+                return new RChoice.GuidsChoice(choiceRef.Guids.ToList());
+            }
+            return base.ParseChoice(choiceRef);
+        }
         internal class GuidRestField : RField
         {
             public GuidRestField(IEnumerable<Guid> guids) => this.Guids = guids;

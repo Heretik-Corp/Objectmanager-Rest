@@ -36,3 +36,4 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyFileVersion("1.0.0.0")]
 [assembly: InternalsVisibleTo("ObjectManager.Rest.V1")]
 [assembly: InternalsVisibleTo("ObjectManager.Rest.V2")]
+[assembly: InternalsVisibleTo("ObjectManager.Rest.Common.Tests.Unit")]

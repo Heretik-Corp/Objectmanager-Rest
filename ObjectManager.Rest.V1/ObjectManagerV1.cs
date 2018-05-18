@@ -1,6 +1,5 @@
 ﻿using ObjectManager.Rest.Interfaces;
 using ObjectManager.Rest.Interfaces.Authentication;
-using ObjectManager.Rest.Interfaces.Extensions;
 using ObjectManager.Rest.V1.Models;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -38,7 +37,8 @@ namespace ObjectManager.Rest.V1
                 RelativityObject = request,
                 CallingContext = context
             }, token);
-            result.EnsureSuccess();
+            var error = await result.EnsureSuccessAsync();
+            error.ThrowIfNotNull();
             var ret = await result.Content.ReadAsAsync<ObjectUpdateResult>();
             return ret;
         }
@@ -51,7 +51,8 @@ namespace ObjectManager.Rest.V1
         {
             var request = RelativityObjectRestReadPrep.PrepareForReadRequst(obj, context);
             var result = await _request.PostAsJsonAsync($"{BASE_PATH}/{workspaceId}/objects/{obj.ArtifactId}/read", request, token);
-            result.EnsureSuccess();
+            var error = await result.EnsureSuccessAsync();
+            error.ThrowIfNotNull();
             var ret = await result.Content.ReadAsAsync<ReadResult>();
             return ret.RelativityObject.ToCoreModel();
         }

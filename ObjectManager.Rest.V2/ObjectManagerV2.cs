@@ -1,6 +1,5 @@
 ﻿using ObjectManager.Rest.Interfaces;
 using ObjectManager.Rest.Interfaces.Authentication;
-using ObjectManager.Rest.Interfaces.Extensions;
 using ObjectManager.Rest.V2.Models;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -34,7 +33,8 @@ namespace ObjectManager.Rest.V2
         {
             var request = RelativityObjectRestReadPrep.Prep(obj);
             var result = await _request.PostAsJsonAsync($"/Relativity.REST/api/Relativity.Objects/workspace/{workspaceId}/object/read", request, token);
-            result.EnsureSuccess();
+            var error = await result.EnsureSuccessAsync();
+            error.ThrowIfNotNull();
             var ret = await result.Content.ReadAsAsync<ReadResult>();
             return ret.Object;
         }
@@ -46,9 +46,17 @@ namespace ObjectManager.Rest.V2
 
         public async Task<ObjectUpdateResult> UpdateAsync(int workspaceId, RelativityObject obj, CallingContext context, CancellationToken token)
         {
-            var request = RelativityObjectUpdateRestPrep.Prep(obj);
+            var request = RelativityObjectUpdateRestPrep.Prep(obj, context);
             var result = await _request.PostAsJsonAsync($"/Relativity.REST/api/Relativity.Objects/workspace/{workspaceId}/object/update", request, token);
-            result.EnsureSuccess();
+            var error = await result.EnsureSuccessAsync();
+            try
+            {
+                error.ThrowIfNotNull();
+            }
+            catch (EventHandlerFailedException ehfe)
+            {
+                return new ObjectUpdateResult(ehfe.Message);
+            }
             var ret = await result.Content.ReadAsAsync<ObjectUpdateResult>();
             return ret;
         }

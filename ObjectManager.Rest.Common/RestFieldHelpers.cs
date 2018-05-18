@@ -1,11 +1,28 @@
 ﻿using ObjectManager.Rest.Interfaces.Models;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using static ObjectManager.Rest.RField;
 
-namespace ObjectManager.Rest.Common
+namespace ObjectManager.Rest
 {
+    public static class FieldUpdateBehavior
+    {
+        public const string Replace = "Replace";
+        public const string Merge = "Merge";
+    }
+
     internal class RestFieldParser
     {
+        internal class MultipleChoiceFieldUpdateValue
+        {
+            public MultipleChoiceFieldUpdateValue() { }
+
+            public IEnumerable<RChoice> Choices { get; set; }
+
+            public string Behavior { get; set; }
+        }
+
         public RField Parse(FieldRef field)
         {
             if (field.Guids?.Any() ?? false)
@@ -23,6 +40,42 @@ namespace ObjectManager.Rest.Common
             throw new NotSupportedException("nothing was found");
         }
 
+        public object ParseValue(object value)
+        {
+            if (value is ChoiceRef)
+            {
+                return this.ParseChoice((ChoiceRef)value);
+            }
+            else if (typeof(IEnumerable<ChoiceRef>).IsAssignableFrom(value.GetType()))
+            {
+                return ((IEnumerable<ChoiceRef>)value).Select(x => this.ParseChoice(x)).ToList();
+                //return new MultipleChoiceFieldUpdateValue
+                //{
+                //    Behavior = FieldUpdateBehavior.Replace,
+                //    Choices = 
+                //};
+            }
+            else if (value is DateTime)
+            {
+                return ((DateTime)value).ToString("yyyy-MM-ddTHH:mm:ss.ffZ");
+            }
+            return value;
+        }
+
+        protected virtual RChoice ParseChoice(ChoiceRef choiceRef)
+        {
+            var c = choiceRef;
+            if (c.ArtifactId > 0)
+            {
+                return new RChoice.ArtifactIdChoice(c.ArtifactId);
+            }
+            if (c.Guids?.Any() ?? false)
+            {
+                return new RChoice.GuidChoice(c.Guids.First());
+            }
+            throw new NotSupportedException("ArtifactId or Guid must be set on choice");
+        }
+
         protected virtual RField ParseGuid(FieldRef field)
         {
             return new GuidRestField(field.Guids.First());
@@ -35,30 +88,5 @@ namespace ObjectManager.Rest.Common
         {
             return new NameRestField(field.Name);
         }
-
-    }
-
-    internal class RField
-    {
-
-    }
-
-    internal class ArtifactIdRestField : RField
-    {
-        public ArtifactIdRestField(int artifactId) => this.ArtifactID = artifactId;
-        public int ArtifactID { get; set; }
-    }
-
-    internal class NameRestField : RField
-    {
-        public NameRestField(string name) => this.Name = name;
-        public string Name { get; set; }
-    }
-
-    internal class GuidRestField : RField
-    {
-        public GuidRestField(Guid g) => this.Guid = g;
-        public Guid Guid { get; set; }
-        public int ViewFieldID { get; } = 0;
     }
 }

@@ -1,5 +1,4 @@
-﻿using ObjectManager.Rest.Common;
-using ObjectManager.Rest.Interfaces;
+﻿using ObjectManager.Rest.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -29,7 +28,11 @@ namespace ObjectManager.Rest.V2.Models
             ret.Request = new RequestObj();
             ret.Request.Object = new RestObject(obj.ArtifactId);
             var fields = obj?.FieldValues?.Where(x => x.Field != null).Select(x => parser.Parse(x.Field)).ToList();
-            ret.Request.Fields = fields ?? new List<RField> { new NameRestField("Artifact Id") };
+            if (!(fields?.Any() ?? false))
+            {
+                fields = new List<RField> { new RField.NameRestField("Artifact Id") };
+            }
+            ret.Request.Fields = fields;
             return ret;
         }
     }

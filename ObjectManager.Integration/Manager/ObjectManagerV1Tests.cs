@@ -1,6 +1,6 @@
 ﻿using kCura.Relativity.Client;
+using ObjectManager.Rest.Extensions;
 using ObjectManager.Rest.Interfaces.Authentication;
-using ObjectManager.Rest.Interfaces.Extensions;
 using ObjectManager.Rest.Interfaces.Models;
 using ObjectManager.Rest.Tests.Integration.Common;
 using ObjectManager.Rest.Tests.Integration.Common.Extensions;
@@ -33,19 +33,16 @@ namespace ObjectManager.Rest.V1.Tests.Integration.Manager
             _manager = new ObjectManagerV1(_fixture.Helper.GetRestUrl(), new UsernamePasswordAuthentication(ConfigHelper.UserName, ConfigHelper.Password));
             _creation = new DocumentCreationSetupFixture(fixture.Helper);
             _installFixture = installFixture;
+            _creation.Create(_fixture.WorkspaceId, 1);
+            _installFixture.Init(_fixture.WorkspaceId, ApplicationInstallContext.FieldTestPath);
         }
 
-        public void Dispose()
-        {
-            _creation?.Dispose();
-        }
         #region SanityCheck
 
         [Fact]
         public async Task ReadAsync_SanityCheck()
         {
             //ARRANGE
-            _creation.Create(_fixture.WorkspaceId, 1);
 
             //ACT
             var result = await _manager.ReadAsync(_fixture.WorkspaceId, new Interfaces.RelativityObject
@@ -61,6 +58,53 @@ namespace ObjectManager.Rest.V1.Tests.Integration.Manager
 
         #endregion
 
+        [Fact]
+        public async Task UpdateAsync_UpdateSingleChoiceByGuidUsingChoiceArtifactId_ReturnsSuccess()
+        {
+            //ARRANGE
+            var fieldGuid = Guid.Parse(DocumentFieldDefinitions.SingleChoice);
+            var client = _fixture.Helper.GetServicesManager().CreateProxy<IRSAPIClient>(Relativity.API.ExecutionIdentity.System);
+            client.APIOptions.WorkspaceID = _fixture.WorkspaceId;
+            var choice = client.Repositories.Choice.ReadSingle(Guid.Parse(SingleChoiceChoiceDefinitions.Single1));
+
+            //ACT
+            var value = new ChoiceRef(choice.ArtifactID);
+            var (uResult, result) = await SharedTestCases.RunUpateTestAsync(_manager,
+                _fixture.WorkspaceId,
+                _creation.DocIds.First(),
+                new FieldRef(fieldGuid),
+                value);
+
+            //ASSERT
+            Assert.True(uResult.EventHandlerStatuses.All(x => x.Success));
+            Assert.Equal(_creation.DocIds.Single(), result.ArtifactId);
+            Assert.Contains(result.FieldValues, (f) => f.Field.Guids.Contains(fieldGuid));
+            Assert.Equal(choice.ArtifactID, result[fieldGuid].ValueAsSingleChoice().ArtifactId);
+
+        }
+
+        [Fact]
+        public async Task UpdateAsync_UpdateSingleChoiceByGuidUsingChoiceGuid_ReturnsSuccess()
+        {
+            //ARRANGE
+            var fieldGuid = Guid.Parse(DocumentFieldDefinitions.SingleChoice);
+
+            //ACT
+            var value = new ChoiceRef(Guid.Parse(SingleChoiceChoiceDefinitions.Single1));
+            var (uResult, result) = await SharedTestCases.RunUpateTestAsync(_manager,
+                _fixture.WorkspaceId,
+                _creation.DocIds.First(),
+                new FieldRef(fieldGuid),
+                value);
+
+            //ASSERT
+            Assert.True(uResult.EventHandlerStatuses.All(x => x.Success));
+            Assert.Equal(_creation.DocIds.Single(), result.ArtifactId);
+            Assert.Contains(result.FieldValues, (f) => f.Field.Guids.Contains(fieldGuid));
+            Assert.Equal(value.Guids.First(), result[fieldGuid].ValueAsSingleChoice().Guids.First());
+        }
+
+
         #region UpdateByGuid
         [Theory]
         [MemberData(nameof(FieldTestData))]
@@ -68,8 +112,6 @@ namespace ObjectManager.Rest.V1.Tests.Integration.Manager
         public async Task UpdateAsync_UpdateFieldByGuid_ReturnsSuccess(string fieldGuidString, object value, object expected)
         {
             //ARRANGE
-            _creation.Create(_fixture.WorkspaceId, 1);
-            _installFixture.Init(_fixture.WorkspaceId, ApplicationInstallContext.FieldTestPath);
             var fieldGuid = Guid.Parse(fieldGuidString);
 
             //ACT
@@ -106,8 +148,6 @@ namespace ObjectManager.Rest.V1.Tests.Integration.Manager
         public async Task UpdateAsync_UpdateFieldByArtifactId_ReturnsSuccess(string fieldGuidString, object value, object expected)
         {
             //ARRANGE
-            _creation.Create(_fixture.WorkspaceId, 1);
-            _installFixture.Init(_fixture.WorkspaceId, ApplicationInstallContext.FieldTestPath);
             var fieldGuid = Guid.Parse(fieldGuidString);
             var client = _fixture.Helper.GetServicesManager().CreateProxy<IRSAPIClient>(Relativity.API.ExecutionIdentity.System);
             client.APIOptions.WorkspaceID = _fixture.WorkspaceId;
@@ -144,12 +184,9 @@ namespace ObjectManager.Rest.V1.Tests.Integration.Manager
 
         [Theory]
         [MemberData(nameof(FieldTestData))]
-
         public async Task UpdateAsync_UpdateFieldByName_ReturnsSuccess(string fieldGuidString, object value, object expected)
         {
             //ARRANGE
-            _creation.Create(_fixture.WorkspaceId, 1);
-            _installFixture.Init(_fixture.WorkspaceId, ApplicationInstallContext.FieldTestPath);
             var fieldGuid = Guid.Parse(fieldGuidString);
             var client = _fixture.Helper.GetServicesManager().CreateProxy<IRSAPIClient>(Relativity.API.ExecutionIdentity.System);
             client.APIOptions.WorkspaceID = _fixture.WorkspaceId;
@@ -181,5 +218,10 @@ namespace ObjectManager.Rest.V1.Tests.Integration.Manager
         }
 
         #endregion
+
+        public void Dispose()
+        {
+            _creation?.Dispose();
+        }
     }
 }

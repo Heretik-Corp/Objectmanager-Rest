@@ -2,5 +2,7 @@
 {
     public class CallingContext
     {
+        public LayoutRef Layout { get; set; }
+        public PageMode PageMode { get; set; }
     }
 }

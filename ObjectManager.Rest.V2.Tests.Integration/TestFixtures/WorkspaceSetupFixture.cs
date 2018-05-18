@@ -21,12 +21,14 @@ namespace ObjectManager.Rest.V2.Tests.Integration
         {
             var helper = new TestHelper();
             this.Helper = helper;
-            this.WorkspaceId = 1017116;// Rest.Tests.Integration.Common.TestFixtures.WorkspaceSetupFixtureHelper.SetupEnvironment(helper, _workspaceName);
+            this.WorkspaceId = Rest.Tests.Integration.Common.TestFixtures.
+                WorkspaceSetupFixtureHelper
+                .SetupEnvironment(helper, _workspaceName);
         }
 
         public void Dispose()
         {
-            //Rest.Tests.Integration.Common.TestFixtures.WorkspaceSetupFixtureHelper.TearDown(this.WorkspaceId, this.Helper);
+            Rest.Tests.Integration.Common.TestFixtures.WorkspaceSetupFixtureHelper.TearDown(this.WorkspaceId, this.Helper);
         }
     }
 }

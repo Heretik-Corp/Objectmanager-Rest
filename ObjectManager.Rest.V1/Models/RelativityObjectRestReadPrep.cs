@@ -1,5 +1,4 @@
-﻿using ObjectManager.Rest.Common;
-using ObjectManager.Rest.Interfaces;
+﻿using ObjectManager.Rest.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -16,7 +15,11 @@ namespace ObjectManager.Rest.V1.Models
             var parser = new RestV1Parser();
             var ret = new RelativityObjectRestReadPrep();
             var fields = obj?.FieldValues?.Where(x => x.Field != null).Select(x => parser.Parse(x.Field)).ToList();
-            ret.FieldRefs = fields ?? new List<RField> { new NameRestField("Artifact Id") };
+            if (!(fields?.Any() ?? false))
+            {
+                fields = new List<RField> { new RField.NameRestField("Artifact Id") };
+            }
+            ret.FieldRefs = fields;
             ret.CallingContext = context;
             return ret;
         }

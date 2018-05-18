@@ -1,6 +1,7 @@
-﻿using kCura.Relativity.Client;
-using ObjectManager.Rest.Interfaces;
+﻿using ObjectManager.Rest.Interfaces;
+using ObjectManager.Rest.Legacy.Extensions;
 using Relativity.API;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -23,11 +24,12 @@ namespace ObjectManager.Rest.Legacy
         public Task<RelativityObject> ReadAsync(int workspaceId, RelativityObject obj, CallingContext context, CancellationToken token)
         {
             //TODO: manage repo based on objectType
-            using (var client = _helper.GetServicesManager().CreateProxy<IRSAPIClient>(ExecutionIdentity.CurrentUser))
+            using (var client = _helper.GetClient(workspaceId))
             {
-                client.APIOptions.WorkspaceID = workspaceId;
-                var result = client.Repositories.Document.ReadSingle(obj.ArtifactId);
-                return null;
+                var dto = obj.ToDTODocument();
+                var result = client.Repositories.Document.Read(dto).EnsureSuccess();
+                var resultObject = result.First().ToRelativityObject();
+                return Task.FromResult(resultObject);
             }
         }
 
@@ -39,15 +41,12 @@ namespace ObjectManager.Rest.Legacy
 
         public Task<ObjectUpdateResult> UpdateAsync(int workspaceId, RelativityObject obj, CallingContext context, CancellationToken token)
         {
-            using (var client = _helper.GetServicesManager().CreateProxy<IRSAPIClient>(ExecutionIdentity.CurrentUser))
+            using (var client = _helper.GetClient(workspaceId))
             {
-                var dto = DTOHelpers.ConvertToDocument(obj);
-                var result = client.Repositories.Document.Update(dto);
-                if (!result.Success)
-                {
-                    throw new System.Exception("lazy");
-                }
-                return null;
+                var dto = obj.ToDTODocument();
+                client.APIOptions.WorkspaceID = workspaceId;
+                client.Repositories.Document.UpdateSingle(dto);
+                return Task.FromResult(new ObjectUpdateResult());
             }
         }
     }

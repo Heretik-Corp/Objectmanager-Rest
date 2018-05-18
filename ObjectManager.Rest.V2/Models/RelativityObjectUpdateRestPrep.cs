@@ -21,7 +21,7 @@ namespace ObjectManager.Rest.V2.Models
         public RestRequest Request { get; set; }
         public OperationOptionsRequest OperationOptions { get; set; }
 
-        public static RelativityObjectUpdateRestPrep Prep(RelativityObject obj)
+        public static RelativityObjectUpdateRestPrep Prep(RelativityObject obj, CallingContext context)
         {
             var parser = new RestFieldParser();
             var ret = new RelativityObjectUpdateRestPrep();
@@ -29,6 +29,7 @@ namespace ObjectManager.Rest.V2.Models
             ret.Request.Object = new RestObject(obj.ArtifactId);
             var fields = obj?.FieldValues?.Where(x => x.Field != null).Select(x => RestField.FromFieldRef(x.Field, x.Value, parser)).ToList();
             ret.Request.FieldValues = fields;
+            ret.OperationOptions = new OperationOptionsRequest { CallingContext = context };
             return ret;
         }
     }

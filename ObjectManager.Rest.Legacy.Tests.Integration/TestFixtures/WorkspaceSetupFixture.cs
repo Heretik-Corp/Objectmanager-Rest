@@ -21,7 +21,9 @@ namespace ObjectManager.Rest.Legacy.Tests.Integration.TestFixtures
 
         protected virtual void Setup()
         {
-            var helper = new TestHelper();
+            var helper = TestHelper.ForUser(
+                Relativity.Test.Helpers.SharedTestHelpers.ConfigurationHelper.ADMIN_USERNAME,
+                Relativity.Test.Helpers.SharedTestHelpers.ConfigurationHelper.DEFAULT_PASSWORD);
             this.Helper = helper;
             this.WorkspaceId = WorkspaceSetupFixtureHelper.SetupEnvironment(helper, _workspaceName);
         }

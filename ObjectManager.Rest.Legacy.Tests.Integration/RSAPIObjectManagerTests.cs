@@ -1,5 +1,5 @@
 ﻿using kCura.Relativity.Client;
-using ObjectManager.Rest.Interfaces.Extensions;
+using ObjectManager.Rest.Extensions;
 using ObjectManager.Rest.Interfaces.Models;
 using ObjectManager.Rest.Legacy.Tests.Integration.TestFixtures;
 using ObjectManager.Rest.Tests.Integration.Common;
@@ -33,6 +33,9 @@ namespace ObjectManager.Rest.Legacy.Tests.Integration
             _manager = new RSAPIObjectManager(fixture.Helper);
             _creation = new DocumentCreationSetupFixture(fixture.Helper);
             _installFixture = installFixture;
+
+            _creation.Create(_fixture.WorkspaceId, 1);
+            _installFixture.Init(_fixture.WorkspaceId, ApplicationInstallContext.FieldTestPath);
         }
 
         [Fact]
@@ -49,9 +52,55 @@ namespace ObjectManager.Rest.Legacy.Tests.Integration
 
             //ASSERT
             Assert.Equal(_creation.DocIds.Single(), result.ArtifactId);
-            Assert.Contains(result.FieldValues, (f) => f.Field.Name.Equals("Artifact Id", StringComparison.CurrentCultureIgnoreCase));
-            Assert.Equal(_creation.DocIds.Single(), result["Artifact Id"].ValueAsWholeNumber());
         }
+
+        [Fact]
+        public async Task UpdateAsync_UpdateSingleChoiceByGuidUsingChoiceArtifactId_ReturnsSuccess()
+        {
+            //ARRANGE
+            var fieldGuid = Guid.Parse(DocumentFieldDefinitions.SingleChoice);
+            var client = _fixture.Helper.GetServicesManager().CreateProxy<IRSAPIClient>(Relativity.API.ExecutionIdentity.System);
+            client.APIOptions.WorkspaceID = _fixture.WorkspaceId;
+            var choice = client.Repositories.Choice.ReadSingle(Guid.Parse(SingleChoiceChoiceDefinitions.Single1));
+
+            //ACT
+            var value = new ChoiceRef(choice.ArtifactID);
+            var (uResult, result) = await SharedTestCases.RunUpateTestAsync(_manager,
+                _fixture.WorkspaceId,
+                _creation.DocIds.First(),
+                new FieldRef(fieldGuid),
+                value);
+
+            //ASSERT
+            Assert.True(uResult.EventHandlerStatuses.All(x => x.Success));
+            Assert.Equal(_creation.DocIds.Single(), result.ArtifactId);
+            Assert.Contains(result.FieldValues, (f) => f.Field.Guids.Contains(fieldGuid));
+            Assert.Equal(choice.ArtifactID, result[fieldGuid].ValueAsSingleChoice().ArtifactId);
+
+        }
+
+        [Fact]
+        public async Task UpdateAsync_UpdateSingleChoiceByGuidUsingChoiceGuid_ReturnsSuccess()
+        {
+            //ARRANGE
+            var fieldGuid = Guid.Parse(DocumentFieldDefinitions.SingleChoice);
+
+            //ACT
+            var value = new ChoiceRef(Guid.Parse(SingleChoiceChoiceDefinitions.Single1));
+            var (uResult, result) = await SharedTestCases.RunUpateTestAsync(_manager,
+                _fixture.WorkspaceId,
+                _creation.DocIds.First(),
+                new FieldRef(fieldGuid),
+                value);
+
+            //ASSERT
+            Assert.True(uResult.EventHandlerStatuses.All(x => x.Success));
+            Assert.Equal(_creation.DocIds.Single(), result.ArtifactId);
+            Assert.Contains(result.FieldValues, (f) => f.Field.Guids.Contains(fieldGuid));
+            Assert.Empty(result[fieldGuid].ValueAsSingleChoice().Guids); //this is by design it's how Relativity works
+        }
+
+
 
         #region UpdateByGuid
         [Theory]
@@ -60,8 +109,6 @@ namespace ObjectManager.Rest.Legacy.Tests.Integration
         public async Task UpdateAsync_UpdateFieldByGuid_ReturnsSuccess(string fieldGuidString, object value, object expected)
         {
             //ARRANGE
-            _creation.Create(_fixture.WorkspaceId, 1);
-            _installFixture.Init(_fixture.WorkspaceId, ApplicationInstallContext.FieldTestPath);
             var fieldGuid = Guid.Parse(fieldGuidString);
 
             //ACT
@@ -85,8 +132,7 @@ namespace ObjectManager.Rest.Legacy.Tests.Integration
             Assert.True(uResult.EventHandlerStatuses.All(x => x.Success));
             Assert.Equal(_creation.DocIds.Single(), result.ArtifactId);
             Assert.Contains(result.FieldValues, (f) => f.Field.Guids.Contains(fieldGuid));
-            Assert.Equal(expected, result[fieldGuid].Value);
-
+            Assert.Equal(expected.ToString(), result[fieldGuid].Value.ToString().Trim('0'));
         }
 
         #endregion
@@ -98,8 +144,6 @@ namespace ObjectManager.Rest.Legacy.Tests.Integration
         public async Task UpdateAsync_UpdateFieldByArtifactId_ReturnsSuccess(string fieldGuidString, object value, object expected)
         {
             //ARRANGE
-            _creation.Create(_fixture.WorkspaceId, 1);
-            _installFixture.Init(_fixture.WorkspaceId, ApplicationInstallContext.FieldTestPath);
             var fieldGuid = Guid.Parse(fieldGuidString);
             var client = _fixture.Helper.GetServicesManager().CreateProxy<IRSAPIClient>(Relativity.API.ExecutionIdentity.System);
             client.APIOptions.WorkspaceID = _fixture.WorkspaceId;
@@ -126,9 +170,9 @@ namespace ObjectManager.Rest.Legacy.Tests.Integration
             Assert.True(uResult.EventHandlerStatuses.All(x => x.Success));
             Assert.Equal(_creation.DocIds.Single(), result.ArtifactId);
             Assert.Contains(result.FieldValues, (f) => f.Field.ArtifactId == field.ArtifactID);
-            Assert.Equal(expected, result[field.ArtifactID].Value);
-
+            Assert.Equal(expected.ToString(), result[field.ArtifactID].Value.ToString().Trim('0'));
         }
+
 
         #endregion
 
@@ -140,8 +184,6 @@ namespace ObjectManager.Rest.Legacy.Tests.Integration
         public async Task UpdateAsync_UpdateFieldByName_ReturnsSuccess(string fieldGuidString, object value, object expected)
         {
             //ARRANGE
-            _creation.Create(_fixture.WorkspaceId, 1);
-            _installFixture.Init(_fixture.WorkspaceId, ApplicationInstallContext.FieldTestPath);
             var fieldGuid = Guid.Parse(fieldGuidString);
             var client = _fixture.Helper.GetServicesManager().CreateProxy<IRSAPIClient>(Relativity.API.ExecutionIdentity.System);
             client.APIOptions.WorkspaceID = _fixture.WorkspaceId;
@@ -168,7 +210,7 @@ namespace ObjectManager.Rest.Legacy.Tests.Integration
             Assert.True(uResult.EventHandlerStatuses.All(x => x.Success));
             Assert.Equal(_creation.DocIds.Single(), result.ArtifactId);
             Assert.Contains(result.FieldValues, (f) => f.Field.Name == field.Name);
-            Assert.Equal(expected, result[fieldGuid].Value);
+            Assert.Equal(expected.ToString(), result[field.ArtifactID].Value.ToString().Trim('0'));
 
         }
 
