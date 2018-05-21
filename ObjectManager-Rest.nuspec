@@ -13,6 +13,6 @@
     <tags></tags>
   </metadata>
     <files>
-    <file src="$binPath$" target="lib" />
+    <file src="$binPath$\ObjectManager.Rest.dll" target="lib" />
   </files>
 </package>
