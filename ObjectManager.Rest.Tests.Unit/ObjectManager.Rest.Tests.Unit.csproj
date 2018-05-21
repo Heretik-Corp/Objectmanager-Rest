@@ -5,11 +5,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{68367366-1D34-4AE9-B029-F7B55F18AF25}</ProjectGuid>
+    <ProjectGuid>{FB6CD451-8B65-47AB-B39F-3467506E4C68}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ObjectManager.Rest.V1.Tests.Unit</RootNamespace>
-    <AssemblyName>ObjectManager.Rest.V1.Tests.Unit</AssemblyName>
+    <RootNamespace>ObjectManager.Rest.Tests.Unit</RootNamespace>
+    <AssemblyName>ObjectManager.Rest.Tests.Unit</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -45,8 +45,11 @@
     <Reference Include="Microsoft.Win32.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Win32.Primitives.4.3.0\lib\net46\Microsoft.Win32.Primitives.dll</HintPath>
     </Reference>
-    <Reference Include="Moq, Version=4.8.0.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
-      <HintPath>..\packages\Moq.4.8.2\lib\net45\Moq.dll</HintPath>
+    <Reference Include="Moq, Version=4.7.145.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
+      <HintPath>..\packages\Moq.4.7.145\lib\net45\Moq.dll</HintPath>
+    </Reference>
+    <Reference Include="Relativity.API, Version=9.5.89.76, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.Api.9.5.89.76\lib\Relativity.API.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.AppContext, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -148,6 +151,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="UnitTest1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -155,16 +159,28 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Analyzer Include="..\packages\xunit.analyzers.0.8.0\analyzers\dotnet\cs\xunit.analyzers.dll" />
+    <Analyzer Include="..\packages\xunit.analyzers.0.7.0\analyzers\dotnet\cs\xunit.analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ObjectManager.Rest.Interfaces\ObjectManager.Rest.Interfaces.csproj">
       <Project>{CFE4EBDF-2F4F-4983-99AD-035333627194}</Project>
       <Name>ObjectManager.Rest.Interfaces</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ObjectManager.Rest.Legacy\ObjectManager.Rest.Legacy.csproj">
+      <Project>{B0970CCD-BEA1-4DC0-A026-8288D02A8919}</Project>
+      <Name>ObjectManager.Rest.Legacy</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ObjectManager.Rest.V1\ObjectManager.Rest.V1.csproj">
-      <Project>{d57a182a-bf54-42dd-b17d-6987dac4fa57}</Project>
+      <Project>{D57A182A-BF54-42DD-B17D-6987DAC4FA57}</Project>
       <Name>ObjectManager.Rest.V1</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ObjectManager.Rest.V2\ObjectManager.Rest.V2.csproj">
+      <Project>{40FDDC45-6C9F-4813-88E6-902F44A4A07F}</Project>
+      <Name>ObjectManager.Rest.V2</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ObjectManager.Rest\ObjectManager.Rest.csproj">
+      <Project>{b668c8f1-84c6-458e-ad35-4494a3af7c1b}</Project>
+      <Name>ObjectManager.Rest</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />

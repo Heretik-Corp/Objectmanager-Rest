@@ -3,6 +3,7 @@ using ObjectManager.Rest.Extensions;
 using ObjectManager.Rest.Interfaces.Models;
 using ObjectManager.Rest.Legacy.Tests.Integration.TestFixtures;
 using ObjectManager.Rest.Tests.Integration.Common;
+using ObjectManager.Rest.Tests.Integration.Common.Extensions;
 using ObjectManager.Rest.Tests.Integration.Common.TestFixtures;
 using System;
 using System.Collections.Generic;
@@ -38,6 +39,7 @@ namespace ObjectManager.Rest.Legacy.Tests.Integration
             _installFixture.Init(_fixture.WorkspaceId, ApplicationInstallContext.FieldTestPath);
         }
 
+
         [Fact]
         public async Task ReadAsync_SanityCheck()
         {
@@ -54,6 +56,7 @@ namespace ObjectManager.Rest.Legacy.Tests.Integration
             Assert.Equal(_creation.DocIds.Single(), result.ArtifactId);
         }
 
+        #region SingleChoice
         [Fact]
         public async Task UpdateAsync_UpdateSingleChoiceByGuidUsingChoiceArtifactId_ReturnsSuccess()
         {
@@ -100,7 +103,43 @@ namespace ObjectManager.Rest.Legacy.Tests.Integration
             Assert.Empty(result[fieldGuid].ValueAsSingleChoice().Guids); //this is by design it's how Relativity works
         }
 
+        #endregion
 
+        #region MultiChoice
+
+        [Fact]
+        public Task UpdateAsync_UpdateMultiChoiceByGuidUsingChoiceArtifactId_ReturnsSuccess()
+        {
+            return _manager.UpdateAsync_UpdateMultiChoiceByGuidUsingChoiceArtifactId_ReturnsSuccess(_fixture.Helper, _fixture.WorkspaceId, _creation.DocIds.First());
+        }
+
+        [Fact]
+        public void UpdateAsync_UpdateMultiChoiceByGuidUsingChoiceGuid_ReturnsSuccess()
+        {
+            // TODO: RSAPI does not support guids on choices
+            //return _manager.UpdateAsync_UpdateMultiChoiceByGuidUsingChoiceGuid_ReturnsSuccess(_fixture.Helper, _fixture.WorkspaceId, _creation.DocIds.First());
+        }
+
+
+        #endregion
+
+        #region CallingContext
+        [Fact]
+        public Task UpdateAsync_CallingContextArtifactIdSet_ReturnsCorrectStatus()
+        {
+            return _manager.UpdateAsync_CallingContextArtifactIdSet_ReturnsCorrectStatus(_fixture.Helper, _fixture.WorkspaceId, _creation.DocIds.First());
+        }
+
+        [Fact]
+        public async Task UpdateAsync_CallingContextSetLayoutHasEventhandlerError_ReturnsCorrectStatus()
+        {
+            var result = await _manager.UpdateAsync_CallingContextSetLayoutHasEventhandlerError_ReturnsCorrectStatus(_fixture.Helper, _fixture.WorkspaceId, _creation.DocIds.First());
+
+            //ASSERT
+            Assert.NotNull(result);
+        }
+
+        #endregion
 
         #region UpdateByGuid
         [Theory]

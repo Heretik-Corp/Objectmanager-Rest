@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ObjectManager.Rest.Legacy
+namespace ObjectManager.Rest.Extensions
 {
     public static class DTOExtensions
     {
@@ -29,16 +29,34 @@ namespace ObjectManager.Rest.Legacy
                 // work so all extension methods act as expected
                 return Newtonsoft.Json.JsonConvert.SerializeObject(((Choice)value).ToChoice());
             }
+            if (value is MultiChoiceFieldValueList)
+            {
+                var c = (MultiChoiceFieldValueList)value;
+                return Newtonsoft.Json.JsonConvert.SerializeObject(c.Select(x => x.ToChoice()).ToList());
+            }
             return value;
         }
 
         private static object ParseValue(object value)
         {
+            if (value == null)
+            {
+                return value;
+            }
             if (value is ChoiceRef)
             {
                 return ((ChoiceRef)value).ToRelativityChoice();
             }
+            else if (typeof(IEnumerable<ChoiceRef>).IsAssignableFrom(value.GetType()))
+            {
+                return ParseMultiChoice(((IEnumerable<ChoiceRef>)value));
+            }
             return value;
+        }
+
+        private static object ParseMultiChoice(IEnumerable<ChoiceRef> value)
+        {
+            return new MultiChoiceFieldValueList(value.Select(x => ToRelativityChoice(x)).ToList());
         }
 
         private static FieldValue ToFieldValue(FieldValuePair pair)

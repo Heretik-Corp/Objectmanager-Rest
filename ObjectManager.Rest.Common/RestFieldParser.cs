@@ -6,12 +6,6 @@ using static ObjectManager.Rest.RField;
 
 namespace ObjectManager.Rest
 {
-    public static class FieldUpdateBehavior
-    {
-        public const string Replace = "Replace";
-        public const string Merge = "Merge";
-    }
-
     internal class RestFieldParser
     {
         internal class MultipleChoiceFieldUpdateValue
@@ -42,24 +36,27 @@ namespace ObjectManager.Rest
 
         public object ParseValue(object value)
         {
+            if (value == null)
+            {
+                return null;
+            }
             if (value is ChoiceRef)
             {
                 return this.ParseChoice((ChoiceRef)value);
             }
             else if (typeof(IEnumerable<ChoiceRef>).IsAssignableFrom(value.GetType()))
             {
-                return ((IEnumerable<ChoiceRef>)value).Select(x => this.ParseChoice(x)).ToList();
-                //return new MultipleChoiceFieldUpdateValue
-                //{
-                //    Behavior = FieldUpdateBehavior.Replace,
-                //    Choices = 
-                //};
+                return ParseMultiChoice(((IEnumerable<ChoiceRef>)value));
             }
             else if (value is DateTime)
             {
                 return ((DateTime)value).ToString("yyyy-MM-ddTHH:mm:ss.ffZ");
             }
             return value;
+        }
+        protected virtual object ParseMultiChoice(IEnumerable<ChoiceRef> choices)
+        {
+            return choices.Select(x => this.ParseChoice(x)).ToList();
         }
 
         protected virtual RChoice ParseChoice(ChoiceRef choiceRef)

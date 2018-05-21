@@ -7,6 +7,7 @@ namespace ObjectManager.Rest.V1
 {
     internal class RestV1Parser : RestFieldParser
     {
+
         protected override RField ParseGuid(FieldRef field)
         {
             return new GuidRestField(field.Guids.ToList());
@@ -19,6 +20,14 @@ namespace ObjectManager.Rest.V1
                 return new RChoice.GuidsChoice(choiceRef.Guids.ToList());
             }
             return base.ParseChoice(choiceRef);
+        }
+        protected override object ParseMultiChoice(IEnumerable<ChoiceRef> choices)
+        {
+            return new MultipleChoiceFieldUpdateValue
+            {
+                Choices = (IEnumerable<RChoice>)base.ParseMultiChoice(choices),
+                Behavior = FieldUpdateBehavior.Replace
+            };
         }
         internal class GuidRestField : RField
         {

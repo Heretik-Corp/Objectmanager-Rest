@@ -38,7 +38,14 @@ namespace ObjectManager.Rest.V1
                 CallingContext = context
             }, token);
             var error = await result.EnsureSuccessAsync();
-            error.ThrowIfNotNull();
+            try
+            {
+                error.ThrowIfNotNull();
+            }
+            catch (EventHandlerFailedException ehfe)
+            {
+                return new ObjectUpdateResult(ehfe.Message);
+            }
             var ret = await result.Content.ReadAsAsync<ObjectUpdateResult>();
             return ret;
         }

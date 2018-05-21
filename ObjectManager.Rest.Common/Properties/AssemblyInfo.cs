@@ -37,3 +37,4 @@ using System.Runtime.InteropServices;
 [assembly: InternalsVisibleTo("ObjectManager.Rest.V1")]
 [assembly: InternalsVisibleTo("ObjectManager.Rest.V2")]
 [assembly: InternalsVisibleTo("ObjectManager.Rest.Common.Tests.Unit")]
+[assembly: InternalsVisibleTo("ObjectManager.Rest.V1.Tests.Unit")]

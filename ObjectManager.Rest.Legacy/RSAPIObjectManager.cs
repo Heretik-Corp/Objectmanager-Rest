@@ -1,4 +1,5 @@
-﻿using ObjectManager.Rest.Interfaces;
+﻿using ObjectManager.Rest.Extensions;
+using ObjectManager.Rest.Interfaces;
 using ObjectManager.Rest.Legacy.Extensions;
 using Relativity.API;
 using System.Linq;

@@ -7,10 +7,32 @@ namespace ObjectManager.Rest.V2.Models
 {
     internal class RelativityObjectUpdateRestPrep
     {
+        internal class InternalLayoutDef
+        {
+            public int ArtifactId { get; set; }
+        }
+        internal class PrivateCallingContext
+        {
+            public InternalLayoutDef Layout { get; set; }
+
+            public static PrivateCallingContext FromContext(CallingContext context)
+            {
+                if (context == null)
+                {
+                    return null;
+                }
+                return new PrivateCallingContext
+                {
+                    Layout = new InternalLayoutDef
+                    {
+                        ArtifactId = context.Layout.ArtifactId
+                    }
+                };
+            }
+        }
         internal class OperationOptionsRequest
         {
-            public CallingContext CallingContext { get; set; }
-
+            public PrivateCallingContext CallingContext { get; set; }
         }
 
         internal class RestRequest
@@ -29,7 +51,7 @@ namespace ObjectManager.Rest.V2.Models
             ret.Request.Object = new RestObject(obj.ArtifactId);
             var fields = obj?.FieldValues?.Where(x => x.Field != null).Select(x => RestField.FromFieldRef(x.Field, x.Value, parser)).ToList();
             ret.Request.FieldValues = fields;
-            ret.OperationOptions = new OperationOptionsRequest { CallingContext = context };
+            ret.OperationOptions = new OperationOptionsRequest { CallingContext = PrivateCallingContext.FromContext(context) };
             return ret;
         }
     }

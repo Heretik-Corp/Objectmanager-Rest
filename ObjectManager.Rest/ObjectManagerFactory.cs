@@ -22,7 +22,7 @@ namespace ObjectManager
         public virtual async Task<IObjectManager> GetObjectManagerAsync(IAuthentication authentication)
         {
             var version = await _versionResolver.GetRelativityVersionAsync();
-            if (version >= new Version("9.5.287.43") || version < new Version("9.6.50.31"))
+            if (version >= new Version("9.5.287.43") && version < new Version("9.6.50.31"))
             {
                 var host = GetRestUrl(_helper);
                 return new ObjectManagerV1(host, authentication);

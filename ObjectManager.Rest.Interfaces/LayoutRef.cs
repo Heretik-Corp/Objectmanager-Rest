@@ -2,11 +2,13 @@
 {
     public class LayoutRef
     {
-        public LayoutRef() { }
-        //public LayoutRef(string name) => this.Name = name;
-        public LayoutRef(int artifactId) => this.ArtifactId = artifactId;
+        public LayoutRef(string name, int artifactId)
+        {
+            this.Name = name;
+            this.ArtifactId = artifactId;
+        }
 
-        public int ArtifactId { get; set; }
-        //public string Name { get; set; }
+        public int ArtifactId { get; }
+        public string Name { get; }
     }
 }

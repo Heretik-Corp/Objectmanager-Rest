@@ -47,8 +47,9 @@
     <Compile Include="Extensions\HttpResponseMessageExtensions.cs" />
     <Compile Include="RChoice.cs" />
     <Compile Include="RestField.cs" />
-    <Compile Include="RestFieldHelpers.cs" />
+    <Compile Include="FieldUpdateBehavior.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RestFieldParser.cs" />
     <Compile Include="RField.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -58,6 +58,7 @@ namespace ObjectManager.Rest.V1.Tests.Integration.Manager
 
         #endregion
 
+        #region SingleChoice
         [Fact]
         public async Task UpdateAsync_UpdateSingleChoiceByGuidUsingChoiceArtifactId_ReturnsSuccess()
         {
@@ -103,7 +104,42 @@ namespace ObjectManager.Rest.V1.Tests.Integration.Manager
             Assert.Contains(result.FieldValues, (f) => f.Field.Guids.Contains(fieldGuid));
             Assert.Equal(value.Guids.First(), result[fieldGuid].ValueAsSingleChoice().Guids.First());
         }
+        #endregion
 
+        #region MultiChoice
+
+        [Fact]
+        public Task UpdateAsync_UpdateMultiChoiceByGuidUsingChoiceArtifactId_ReturnsSuccess()
+        {
+            return _manager.UpdateAsync_UpdateMultiChoiceByGuidUsingChoiceArtifactId_ReturnsSuccess(_fixture.Helper, _fixture.WorkspaceId, _creation.DocIds.First());
+        }
+
+        [Fact]
+        public Task UpdateAsync_UpdateMultiChoiceByGuidUsingChoiceGuid_ReturnsSuccess()
+        {
+            return _manager.UpdateAsync_UpdateMultiChoiceByGuidUsingChoiceGuid_ReturnsSuccess(_fixture.Helper, _fixture.WorkspaceId, _creation.DocIds.First());
+        }
+
+
+        #endregion
+
+        #region CallingContext
+        [Fact]
+        public Task UpdateAsync_CallingContextArtifactIdSet_ReturnsCorrectStatus()
+        {
+            return _manager.UpdateAsync_CallingContextArtifactIdSet_ReturnsCorrectStatus(_fixture.Helper, _fixture.WorkspaceId, _creation.DocIds.First());
+        }
+
+        [Fact]
+        public async Task UpdateAsync_CallingContextSetLayoutHasEventhandlerError_ReturnsCorrectStatus()
+        {
+            var result = await _manager.UpdateAsync_CallingContextSetLayoutHasEventhandlerError_ReturnsCorrectStatus(_fixture.Helper, _fixture.WorkspaceId, _creation.DocIds.First());
+
+            //ASSERT
+            Assert.Contains(result.EventHandlerStatuses, x => !x.Success);
+        }
+
+        #endregion
 
         #region UpdateByGuid
         [Theory]

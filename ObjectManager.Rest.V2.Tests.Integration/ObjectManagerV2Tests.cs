@@ -113,37 +113,6 @@ namespace ObjectManager.Rest.V2.Tests.Integration
         #region MultiChoice
 
         [Fact]
-        public async Task UpdateAsync_UpdateMultiChoiceByGuidUsingChoiceArtifactId_ReturnsSuccess()
-        {
-            //ARRANGE
-            var fieldGuid = Guid.Parse(DocumentFieldDefinitions.Multichoice);
-
-            var client = _fixture.Helper.GetServicesManager().CreateProxy<IRSAPIClient>(Relativity.API.ExecutionIdentity.System);
-            client.APIOptions.WorkspaceID = _fixture.WorkspaceId;
-            var choice1 = client.Repositories.Choice.ReadSingle(Guid.Parse(MultiChoiceChoiceDefinitions.Multi1));
-            var choice2 = client.Repositories.Choice.ReadSingle(Guid.Parse(MultiChoiceChoiceDefinitions.Multi2));
-
-            //ACT
-            var value = new List<ChoiceRef> {
-                new ChoiceRef(choice1.ArtifactID),
-                new ChoiceRef(choice2.ArtifactID)
-            };
-
-            var (uResult, result) = await SharedTestCases.RunUpateTestAsync(_manager,
-                _fixture.WorkspaceId,
-                _creation.DocIds.First(),
-                new FieldRef(fieldGuid),
-                value);
-
-            //ASSERT
-            Assert.True(uResult.EventHandlerStatuses.All(x => x.Success));
-            Assert.Equal(_creation.DocIds.Single(), result.ArtifactId);
-            Assert.Contains(result.FieldValues, (f) => f.Field.Guids.Contains(fieldGuid));
-            Assert.Equal(choice1.ArtifactID, result[fieldGuid].ValueAsMultiChoice().First().ArtifactId);
-            Assert.Equal(choice2.ArtifactID, result[fieldGuid].ValueAsMultiChoice().Last().ArtifactId);
-        }
-
-        [Fact]
         public async Task UpdateAsync_UpdateMultiChoiceByGuidUsingChoiceGuid_ReturnsSuccess()
         {
             //ARRANGE
@@ -168,6 +137,11 @@ namespace ObjectManager.Rest.V2.Tests.Integration
             Assert.Equal(value.Last().Guids.First(), result[fieldGuid].ValueAsMultiChoice().Last().Guids.First());
         }
 
+        [Fact]
+        public Task UpdateAsync_UpdateMultiChoiceByGuidUsingChoiceArtifactId_ReturnsSuccess()
+        {
+            return _manager.UpdateAsync_UpdateMultiChoiceByGuidUsingChoiceArtifactId_ReturnsSuccess(_fixture.Helper, _fixture.WorkspaceId, _creation.DocIds.First());
+        }
 
         #endregion
 
@@ -195,6 +169,9 @@ namespace ObjectManager.Rest.V2.Tests.Integration
             Assert.Equal(expected, result[fieldGuid].Value);
         }
 
+        #endregion
+
+        #region CallingContext
         [Fact]
         public async Task UpdateAsync_CallingContextArtifactIdSet_ReturnsCorrectStatus()
         {
@@ -218,10 +195,7 @@ namespace ObjectManager.Rest.V2.Tests.Integration
 
             var result = await _manager.UpdateAsync(_fixture.WorkspaceId, obj, new Interfaces.CallingContext
             {
-                Layout = new Interfaces.LayoutRef
-                {
-                    ArtifactId = layout.ArtifactID
-                }
+                Layout = new Interfaces.LayoutRef(layout.Name, layout.ArtifactID)
             });
 
             //ASSERT
@@ -251,16 +225,12 @@ namespace ObjectManager.Rest.V2.Tests.Integration
 
             var result = await _manager.UpdateAsync(_fixture.WorkspaceId, obj, new Interfaces.CallingContext
             {
-                Layout = new Interfaces.LayoutRef
-                {
-                    ArtifactId = layout.ArtifactID
-                }
+                Layout = new Interfaces.LayoutRef(layout.Name, layout.ArtifactID)
             });
 
             //ASSERT
             Assert.Contains(result.EventHandlerStatuses, x => !x.Success);
         }
-
 
         #endregion
 

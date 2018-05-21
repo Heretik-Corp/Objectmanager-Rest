@@ -150,6 +150,46 @@ namespace ObjectManager.Rest.Legacy.Tests.Unit
             Assert.Equal(123, result.FieldValues.Single().Field.ArtifactId);
             Assert.Equal("Choice Name", result[123].ValueAsSingleChoice().Name);
         }
+
+        [Fact]
+        public void ToRelativityObject_FieldValueIsMultiChoiceWithGuid_ResturnsValueAsChoice()
+        {
+            //ARRANGE
+            var choiceGuid = Guid.NewGuid();
+            var doc = new Document();
+            doc.Fields = new List<FieldValue>();
+            doc.Fields.Add(new FieldValue(123, new MultiChoiceFieldValueList(new Choice(choiceGuid)), true));
+
+            //ACT
+            var result = doc.ToRelativityObject();
+
+            //ASSERT
+            Assert.NotEmpty(result.FieldValues);
+            Assert.NotNull(result.FieldValues.SingleOrDefault()?.Field);
+            Assert.Equal(123, result.FieldValues.Single().Field.ArtifactId);
+            Assert.Equal(choiceGuid, result[123].ValueAsMultiChoice().First().Guids.First());
+        }
+
+        [Fact]
+        public void ToRelativityObject_FieldValueIsMultiChoiceWithName_ResturnsValueAsChoice()
+        {
+            //ARRANGE
+            var doc = new Document();
+            doc.Fields = new List<FieldValue>();
+            doc.Fields.Add(new FieldValue(123, new MultiChoiceFieldValueList(new Choice() { Name = "Choice Name" }), true));
+
+            //ACT
+            var result = doc.ToRelativityObject();
+
+            //ASSERT
+            Assert.NotEmpty(result.FieldValues);
+            Assert.NotNull(result.FieldValues.SingleOrDefault()?.Field);
+            Assert.Equal(123, result.FieldValues.Single().Field.ArtifactId);
+            Assert.Equal("Choice Name", result[123].ValueAsMultiChoice().First().Name);
+        }
+
+
+
         #endregion
 
         #region ToDTODocument
@@ -329,6 +369,31 @@ namespace ObjectManager.Rest.Legacy.Tests.Unit
             Assert.Equal("choice name", result.Fields.First().ValueAsSingleChoice.Name);
         }
 
+
+        [Fact]
+        public void ToDTODocument_FieldValueIsMultiChoiceWithName_ResturnsValueAsRelativityChoice()
+        {
+            //ARRANGE
+            var doc = new RelativityObject();
+            var cGuid = Guid.NewGuid();
+            doc.FieldValues = new List<FieldValuePair>()
+            {
+                new FieldValuePair
+                {
+                    Field = new FieldRef(123),
+                    Value = new List<ChoiceRef>{new ChoiceRef("choice name") }
+                }
+            };
+
+            //ACT
+            var result = doc.ToDTODocument();
+
+            //ASSERT
+            Assert.NotEmpty(result.Fields);
+            Assert.NotNull(result.Fields.FirstOrDefault());
+            Assert.IsType<MultiChoiceFieldValueList>(result.Fields.First().Value);
+            Assert.Equal("choice name", result.Fields.First().ValueAsMultipleChoice.First().Name);
+        }
 
 
 
