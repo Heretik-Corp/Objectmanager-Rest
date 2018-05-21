@@ -39,6 +39,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ObjectManager.Rest.Common.T
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ObjectManager.Rest.Tests.Unit", "ObjectManager.Rest.Tests.Unit\ObjectManager.Rest.Tests.Unit.csproj", "{FB6CD451-8B65-47AB-B39F-3467506E4C68}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{598AACAB-8FB3-40A2-900D-1B7D007712C0}"
+	ProjectSection(SolutionItems) = preProject
+		ObjectManager-Rest.nuspec = ObjectManager-Rest.nuspec
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

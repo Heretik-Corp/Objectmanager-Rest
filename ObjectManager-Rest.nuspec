@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>ObjectManager-Rest</id>
+    <version>$version$</version>
+    <authors>Heretik</authors>
+    <owners>Heretik</owners>
+    <projectUrl>https://github.com/Heretik-Corp/Objectmanager-Rest</projectUrl>
+    <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>An independent implementation of the Relativity object manager that is backwards compatible
+    </description>
+    <tags></tags>
+  </metadata>
+    <files>
+    <file src="$binPath$" target="lib" />
+  </files>
+</package>
