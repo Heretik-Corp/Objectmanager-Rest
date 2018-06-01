@@ -40,6 +40,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DbContextHelper, Version=2.0.0.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RelativityDev.DbContextHelper.2.0.0.1\lib\DbContextHelper.dll</HintPath>
+    </Reference>
     <Reference Include="kCura.Config, Version=9.5.89.76, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Relativity.Other.9.5.89.76\lib\kCura.Config.dll</HintPath>
     </Reference>

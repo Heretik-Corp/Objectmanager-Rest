@@ -1,13 +1,13 @@
-﻿using kCura.Relativity.Client;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using kCura.Relativity.Client;
 using kCura.Relativity.Client.DTOs;
 using ObjectManager.Rest.Extensions;
 using ObjectManager.Rest.Interfaces;
 using ObjectManager.Rest.Interfaces.Models;
 using Relativity.API;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace ObjectManager.Rest.Tests.Integration.Common.Extensions
@@ -123,6 +123,31 @@ namespace ObjectManager.Rest.Tests.Integration.Common.Extensions
 
             return result;
 
+        }
+
+        public static async Task<RelativityObject> ReadAsync_CallingContextSetLayoutHasPreload_ReturnsCorrectLoadedFields(this IObjectManager manager, IHelper helper, int workspaceId, int docId)
+        {
+            var fieldGuid = Guid.Parse(DocumentFieldDefinitions.LongText);
+
+            var client = helper.GetServicesManager().CreateProxy<IRSAPIClient>(Relativity.API.ExecutionIdentity.System);
+            client.APIOptions.WorkspaceID = workspaceId;
+
+            var query = new Query<Layout>();
+            query.Condition = new TextCondition(LayoutFieldNames.TextIdentifier, TextConditionEnum.EqualTo, "Test Preload");
+            query.Fields = FieldValue.AllFields;
+            var layout = client.Repositories.Layout.Query(query).Results.First().Artifact;
+
+            var obj = SharedTestCases.CreateTestObject(
+                docId,
+                new FieldRef(fieldGuid),
+                true);
+
+            var result = await manager.ReadAsync(workspaceId, obj, new Interfaces.CallingContext
+            {
+                Layout = new Interfaces.LayoutRef(layout.Name, layout.ArtifactID)
+            });
+
+            return result;
         }
 
         #endregion

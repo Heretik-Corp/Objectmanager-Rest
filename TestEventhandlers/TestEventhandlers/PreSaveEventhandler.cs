@@ -36,7 +36,7 @@ namespace TestEventhandlers
                 return new Response
                 {
                     Success = false,
-                    Message = "There is an error saving this layout yes no Field is required"
+                    Message = "There is an error saving this layout value of yes no cannot be 'Yes'."
                 };
             }
             return new Response
