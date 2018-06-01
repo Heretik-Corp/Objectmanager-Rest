@@ -1,10 +1,10 @@
-﻿using ObjectManager.Rest.Interfaces;
-using ObjectManager.Rest.Interfaces.Authentication;
-using ObjectManager.Rest.V2.Models;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
+using ObjectManager.Rest.Interfaces;
+using ObjectManager.Rest.Interfaces.Authentication;
+using ObjectManager.Rest.V2.Models;
 
 namespace ObjectManager.Rest.V2
 {
@@ -31,7 +31,7 @@ namespace ObjectManager.Rest.V2
 
         public async Task<RelativityObject> ReadAsync(int workspaceId, RelativityObject obj, CallingContext context, CancellationToken token)
         {
-            var request = RelativityObjectRestReadPrep.Prep(obj);
+            var request = RelativityObjectRestReadPrep.Prep(obj, context);
             var result = await _request.PostAsJsonAsync($"/Relativity.REST/api/Relativity.Objects/workspace/{workspaceId}/object/read", request, token);
             var error = await result.EnsureSuccessAsync();
             error.ThrowIfNotNull();

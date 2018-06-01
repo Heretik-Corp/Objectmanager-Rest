@@ -1,6 +1,7 @@
-﻿using ObjectManager.Rest.Interfaces;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using ObjectManager.Rest.Interfaces;
+using static ObjectManager.Rest.V2.Models.RelativityObjectUpdateRestPrep;
 
 namespace ObjectManager.Rest.V2.Models
 {
@@ -20,8 +21,9 @@ namespace ObjectManager.Rest.V2.Models
 
 
         public RequestObj Request { get; set; }
+        public OperationOptionsRequest OperationOptions { get; set; }
 
-        public static RelativityObjectRestReadPrep Prep(RelativityObject obj)
+        public static RelativityObjectRestReadPrep Prep(RelativityObject obj, CallingContext context)
         {
             var parser = new RestFieldParser();
             var ret = new RelativityObjectRestReadPrep();
@@ -33,6 +35,7 @@ namespace ObjectManager.Rest.V2.Models
                 fields = new List<RField> { new RField.NameRestField("Artifact Id") };
             }
             ret.Request.Fields = fields;
+            ret.OperationOptions = new OperationOptionsRequest { CallingContext = PrivateCallingContext.FromContext(context) };
             return ret;
         }
     }

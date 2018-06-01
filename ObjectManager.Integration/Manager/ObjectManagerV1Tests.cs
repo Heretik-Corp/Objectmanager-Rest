@@ -1,14 +1,14 @@
-﻿using kCura.Relativity.Client;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using kCura.Relativity.Client;
 using ObjectManager.Rest.Extensions;
 using ObjectManager.Rest.Interfaces.Authentication;
 using ObjectManager.Rest.Interfaces.Models;
 using ObjectManager.Rest.Tests.Integration.Common;
 using ObjectManager.Rest.Tests.Integration.Common.Extensions;
 using ObjectManager.Rest.Tests.Integration.Common.TestFixtures;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Xunit;
 using Xunit.Categories;
 
@@ -138,6 +138,20 @@ namespace ObjectManager.Rest.V1.Tests.Integration.Manager
             //ASSERT
             Assert.Contains(result.EventHandlerStatuses, x => !x.Success);
         }
+
+        [Fact]
+        public async Task ReadAsync_CallingContextSetLayoutHasPreload_ReturnsCorrectLoadedFields()
+        {
+            //ARRANGE
+            var fieldGuid = Guid.Parse(DocumentFieldDefinitions.LongText);
+
+            //ACT
+            var result = await _manager.ReadAsync_CallingContextSetLayoutHasPreload_ReturnsCorrectLoadedFields(_fixture.Helper, _fixture.WorkspaceId, _creation.DocIds.First());
+
+            //ASSERT
+            Assert.NotNull(result[fieldGuid].Value);
+        }
+
 
         #endregion
 
