@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ObjectManager.Rest.Legacy.Tests.Integration</RootNamespace>
     <AssemblyName>ObjectManager.Rest.Legacy.Tests.Integration</AssemblyName>
-    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">15.0</VisualStudioVersion>
@@ -20,6 +20,7 @@
     <TestProjectType>UnitTest</TestProjectType>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -39,8 +40,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="kCura, Version=9.6.85.9, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Relativity.Other.9.6.85.9\lib\kCura.dll</HintPath>
+    <Reference Include="kCura.Config, Version=9.5.89.76, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.Other.9.5.89.76\lib\kCura.Config.dll</HintPath>
+    </Reference>
+    <Reference Include="kCura.Data.RowDataGateway, Version=9.5.89.76, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.Other.9.5.89.76\lib\kCura.Data.RowDataGateway.dll</HintPath>
     </Reference>
     <Reference Include="kCura.Relativity.Client, Version=9.5.89.76, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Relativity.Rsapi.9.5.89.76\lib\kCura.Relativity.Client.dll</HintPath>
@@ -63,8 +67,8 @@
     <Reference Include="Relativity.Services.ServiceProxy, Version=1.0.1.308, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Relativity.ObjectManager.9.5.89.76\lib\Relativity.Services.ServiceProxy.dll</HintPath>
     </Reference>
-    <Reference Include="Relativity.Test.Helpers, Version=4.2.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RelativityDev.RelativityTestHelpers.4.2.0.1\lib\Relativity.Test.Helpers.dll</HintPath>
+    <Reference Include="Relativity.Test.Helpers, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RelativityTestHelpersNuget.1.3.0\lib\Relativity.Test.Helpers.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.AppContext, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">

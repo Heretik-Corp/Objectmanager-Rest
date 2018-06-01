@@ -1,7 +1,7 @@
-﻿using ObjectManager.Rest.Tests.Integration.Common.TestFixtures;
+﻿using System;
+using ObjectManager.Rest.Tests.Integration.Common.TestFixtures;
 using Relativity.API;
 using Relativity.Test.Helpers;
-using System;
 using Xunit;
 
 namespace ObjectManager.Rest.Legacy.Tests.Integration.TestFixtures
@@ -21,9 +21,7 @@ namespace ObjectManager.Rest.Legacy.Tests.Integration.TestFixtures
 
         protected virtual void Setup()
         {
-            var helper = TestHelper.ForUser(
-                Relativity.Test.Helpers.SharedTestHelpers.ConfigurationHelper.ADMIN_USERNAME,
-                Relativity.Test.Helpers.SharedTestHelpers.ConfigurationHelper.DEFAULT_PASSWORD);
+            var helper = new TestHelper();
             this.Helper = helper;
             this.WorkspaceId = WorkspaceSetupFixtureHelper.SetupEnvironment(helper, _workspaceName);
         }
