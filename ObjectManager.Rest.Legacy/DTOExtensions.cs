@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using kCura.Relativity.Client.DTOs;
+using Newtonsoft.Json.Linq;
 using ObjectManager.Rest.Interfaces;
 using ObjectManager.Rest.Interfaces.Models;
 
@@ -30,13 +31,14 @@ namespace ObjectManager.Rest.Extensions
             if (value is MultiChoiceFieldValueList)
             {
                 var c = (MultiChoiceFieldValueList)value;
-                return Newtonsoft.Json.JsonConvert.SerializeObject(c.Select(x => x.ToChoiceRef()).ToList());
+                return c.Select(x => x.ToChoiceRef()).ToList();
             }
             return value;
         }
 
         private static object ParseValue(object value, kCura.Relativity.Client.FieldType fieldType)
         {
+            var vType = (value?.GetType() ?? null);
             if (value == null)
             {
                 return value;
@@ -45,17 +47,17 @@ namespace ObjectManager.Rest.Extensions
             {
                 return ((ChoiceRef)value).ToRelativityChoice();
             }
-            else if (fieldType == kCura.Relativity.Client.FieldType.SingleChoice && ((value?.GetType() ?? null) == typeof(string)))
+            else if (fieldType == kCura.Relativity.Client.FieldType.SingleChoice && ((vType == typeof(string)) || vType == typeof(JObject)))
             {
-                return Newtonsoft.Json.JsonConvert.DeserializeObject<ChoiceRef>(value?.ToString() ?? string.Empty).ToRelativityChoice();
+                return Newtonsoft.Json.JsonConvert.DeserializeObject<ChoiceRef>(value.ToString() ?? string.Empty).ToRelativityChoice();
             }
             else if (typeof(IEnumerable<ChoiceRef>).IsAssignableFrom(value.GetType()))
             {
                 return ParseMultiChoice(((IEnumerable<ChoiceRef>)value));
             }
-            else if (fieldType == kCura.Relativity.Client.FieldType.MultipleChoice && ((value?.GetType() ?? null) == typeof(string)))
+            else if (fieldType == kCura.Relativity.Client.FieldType.MultipleChoice && ((vType == typeof(string)) || vType == typeof(JArray)))
             {
-                return ParseMultiChoice(Newtonsoft.Json.JsonConvert.DeserializeObject<IEnumerable<ChoiceRef>>(value?.ToString() ?? string.Empty));
+                return ParseMultiChoice(Newtonsoft.Json.JsonConvert.DeserializeObject<IEnumerable<ChoiceRef>>(value.ToString() ?? string.Empty));
             }
             return value;
         }
