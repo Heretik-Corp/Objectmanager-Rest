@@ -1,6 +1,6 @@
-﻿using ObjectManager.Rest.Interfaces.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using ObjectManager.Rest.Interfaces.Models;
 
 namespace ObjectManager.Rest.Extensions
 {
@@ -15,6 +15,10 @@ namespace ObjectManager.Rest.Extensions
             if (pair.Value == null)
             {
                 return null;
+            }
+            if (pair.Value is ChoiceRef)
+            {
+                return pair.Value as ChoiceRef;
             }
             var choice = Newtonsoft.Json.JsonConvert.DeserializeObject<ChoiceRef>(pair.Value.ToString());
             return choice;

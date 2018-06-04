@@ -25,9 +25,7 @@ namespace ObjectManager.Rest.Extensions
         {
             if (value is Choice)
             {
-                // seems weird but staying consistant with how other versions of object manager 
-                // work so all extension methods act as expected
-                return Newtonsoft.Json.JsonConvert.SerializeObject(((Choice)value).ToChoiceRef());
+                return ((Choice)value).ToChoiceRef();
             }
             if (value is MultiChoiceFieldValueList)
             {
