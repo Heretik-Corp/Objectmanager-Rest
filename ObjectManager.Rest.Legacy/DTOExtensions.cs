@@ -55,7 +55,7 @@ namespace ObjectManager.Rest.Extensions
             {
                 return ParseMultiChoice(((IEnumerable<ChoiceRef>)value));
             }
-            else if (fieldType == kCura.Relativity.Client.FieldType.MultipleChoice && ((vType == typeof(string)) || vType == typeof(JObject)))
+            else if (fieldType == kCura.Relativity.Client.FieldType.MultipleChoice && ((vType == typeof(string)) || vType == typeof(JArray)))
             {
                 return ParseMultiChoice(Newtonsoft.Json.JsonConvert.DeserializeObject<IEnumerable<ChoiceRef>>(value.ToString() ?? string.Empty));
             }
