@@ -3,7 +3,7 @@ using kCura.EventHandler;
 
 namespace TestEventhandlers
 {
-    public class PreSaveEventhandler : PreSaveEventHandler
+    public class PresaveEventHandlerYesNo_2 : PreSaveEventHandler
     {
         public override FieldCollection RequiredFields => new FieldCollection();
 
@@ -11,22 +11,22 @@ namespace TestEventhandlers
         {
             var dbContext = this.Helper.GetDBContext(this.Helper.GetActiveCaseID());
             var artifactId = dbContext.GetArtifactId(Guid.Parse(ArtifactHelpers.YES_NO_FIELD));
-            var layoutName = dbContext.GetArtifactName(Guid.Parse("A70ED5F2-47CF-4DED-985E-2DABE6679C5C"));
-
+            var layoutName = dbContext.GetArtifactName(Guid.Parse("61F1A01E-15DA-4DFD-B3E6-CEF757E39F2B"));
             if (this.ActiveLayout.Name == layoutName &&
-                this.ActiveArtifact.IsLoaded(artifactId) &&
-                this.ActiveArtifact.GetValue(artifactId) == true)
+    this.ActiveArtifact.IsLoaded(artifactId) &&
+    this.ActiveArtifact.GetValue(artifactId) == true)
             {
                 return new Response
                 {
                     Success = false,
-                    Message = "There is an error saving this layout value of yes no cannot be 'Yes'."
+                    Message = "Value cannot be yes 2."
                 };
             }
             return new Response
             {
                 Success = true
             };
+
         }
     }
 }
