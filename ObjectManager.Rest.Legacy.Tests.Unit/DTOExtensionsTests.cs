@@ -323,6 +323,30 @@ namespace ObjectManager.Rest.Legacy.Tests.Unit
         }
 
         [Fact]
+        public void ToDTODocument_FieldValueIsChoiceRefSerializedWithArtifactId_ResturnsValueAsRelativityChoice()
+        {
+            //ARRANGE
+            var doc = new RelativityObject();
+            doc.FieldValues = new List<FieldValuePair>()
+            {
+                new FieldValuePair
+                {
+                    Field = new FieldRef(123) { FieldType = "SingleChoice" },
+                    Value = Newtonsoft.Json.JsonConvert.SerializeObject(new ChoiceRef(456))
+                }
+            };
+
+            //ACT
+            var result = doc.ToDTODocument();
+
+            //ASSERT
+            Assert.NotEmpty(result.Fields);
+            Assert.NotNull(result.Fields.FirstOrDefault());
+            Assert.Equal(123, result.Fields.First().ArtifactID);
+            Assert.Equal(456, result.Fields.First().ValueAsSingleChoice.ArtifactID);
+        }
+
+        [Fact]
         public void ToDTODocument_FieldValueIsChoiceWithGuid_ResturnsValueAsRelativityChoice()
         {
             //ARRANGE
@@ -417,6 +441,31 @@ namespace ObjectManager.Rest.Legacy.Tests.Unit
                 {
                     Field = new FieldRef(123),
                     Value = new List<ChoiceRef>{new ChoiceRef("choice name") }
+                }
+            };
+
+            //ACT
+            var result = doc.ToDTODocument();
+
+            //ASSERT
+            Assert.NotEmpty(result.Fields);
+            Assert.NotNull(result.Fields.FirstOrDefault());
+            Assert.IsType<MultiChoiceFieldValueList>(result.Fields.First().Value);
+            Assert.Equal("choice name", result.Fields.First().ValueAsMultipleChoice.First().Name);
+        }
+
+        [Fact]
+        public void ToDTODocument_FieldValueIsMultiChoiceSerializedWithName_ResturnsValueAsRelativityChoice()
+        {
+            //ARRANGE
+            var doc = new RelativityObject();
+            var cGuid = Guid.NewGuid();
+            doc.FieldValues = new List<FieldValuePair>()
+            {
+                new FieldValuePair
+                {
+                    Field = new FieldRef(123) { FieldType = "MultipleChoice" },
+                    Value = Newtonsoft.Json.JsonConvert.SerializeObject(new List<ChoiceRef>{new ChoiceRef("choice name") })
                 }
             };
 

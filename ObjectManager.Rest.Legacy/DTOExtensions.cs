@@ -35,7 +35,7 @@ namespace ObjectManager.Rest.Extensions
             return value;
         }
 
-        private static object ParseValue(object value)
+        private static object ParseValue(object value, kCura.Relativity.Client.FieldType fieldType)
         {
             if (value == null)
             {
@@ -45,9 +45,17 @@ namespace ObjectManager.Rest.Extensions
             {
                 return ((ChoiceRef)value).ToRelativityChoice();
             }
+            else if (fieldType == kCura.Relativity.Client.FieldType.SingleChoice && ((value?.GetType() ?? null) == typeof(string)))
+            {
+                return Newtonsoft.Json.JsonConvert.DeserializeObject<ChoiceRef>(value?.ToString() ?? string.Empty).ToRelativityChoice();
+            }
             else if (typeof(IEnumerable<ChoiceRef>).IsAssignableFrom(value.GetType()))
             {
                 return ParseMultiChoice(((IEnumerable<ChoiceRef>)value));
+            }
+            else if (fieldType == kCura.Relativity.Client.FieldType.MultipleChoice && ((value?.GetType() ?? null) == typeof(string)))
+            {
+                return ParseMultiChoice(Newtonsoft.Json.JsonConvert.DeserializeObject<IEnumerable<ChoiceRef>>(value?.ToString() ?? string.Empty));
             }
             return value;
         }
@@ -67,8 +75,9 @@ namespace ObjectManager.Rest.Extensions
             value.Guids = pair.Field.Guids?.ToList() ?? new List<Guid>();
             value.ArtifactID = pair.Field.ArtifactId;
             value.Name = pair.Field.Name;
-            value.Value = ParseValue(pair.Value);
             Enum.TryParse<kCura.Relativity.Client.FieldType>(pair.Field.FieldType, out var fieldType);
+            value.Value = ParseValue(pair.Value, fieldType);
+
             value.FieldType = fieldType;
             return value;
         }
@@ -93,6 +102,10 @@ namespace ObjectManager.Rest.Extensions
         }
         public static Choice ToRelativityChoice(this ChoiceRef choiceRef)
         {
+            if (choiceRef == null)
+            {
+                return null;
+            }
             var choice = new Choice();
             if (choiceRef.ArtifactId > 0)
             {
