@@ -1,9 +1,9 @@
-﻿using kCura.Relativity.Client.DTOs;
-using ObjectManager.Rest.Interfaces;
-using ObjectManager.Rest.Interfaces.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using kCura.Relativity.Client.DTOs;
+using ObjectManager.Rest.Interfaces;
+using ObjectManager.Rest.Interfaces.Models;
 
 namespace ObjectManager.Rest.Extensions
 {
@@ -70,6 +70,8 @@ namespace ObjectManager.Rest.Extensions
             value.ArtifactID = pair.Field.ArtifactId;
             value.Name = pair.Field.Name;
             value.Value = ParseValue(pair.Value);
+            Enum.TryParse<kCura.Relativity.Client.FieldType>(pair.Field.FieldType, out var fieldType);
+            value.FieldType = fieldType;
             return value;
         }
 

@@ -1,10 +1,10 @@
-﻿using kCura.Relativity.Client.DTOs;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using kCura.Relativity.Client.DTOs;
 using ObjectManager.Rest.Extensions;
 using ObjectManager.Rest.Interfaces;
 using ObjectManager.Rest.Interfaces.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Xunit;
 using Xunit.Categories;
 
@@ -369,6 +369,39 @@ namespace ObjectManager.Rest.Legacy.Tests.Unit
             Assert.Equal("choice name", result.Fields.First().ValueAsSingleChoice.Name);
         }
 
+        [Theory]
+        [InlineData("FixedLengthText", kCura.Relativity.Client.FieldType.FixedLengthText)]
+        [InlineData("SingleChoice", kCura.Relativity.Client.FieldType.SingleChoice)]
+        [InlineData("Date", kCura.Relativity.Client.FieldType.Date)]
+        [InlineData("YesNo", kCura.Relativity.Client.FieldType.YesNo)]
+        [InlineData("MultipleChoice", kCura.Relativity.Client.FieldType.MultipleChoice)]
+        [InlineData("LongText", kCura.Relativity.Client.FieldType.LongText)]
+        [InlineData("WholeNumber", kCura.Relativity.Client.FieldType.WholeNumber)]
+        [InlineData("Decimal", kCura.Relativity.Client.FieldType.Decimal)]
+        [InlineData("Currency", kCura.Relativity.Client.FieldType.Currency)]
+        public void TODTODocument_FieldTypeIsPassedinValue_ReturnsCorrectValue(string type, kCura.Relativity.Client.FieldType expected)
+        {
+            //ARRANGE
+            var doc = new RelativityObject();
+            var cGuid = Guid.NewGuid();
+            doc.FieldValues = new List<FieldValuePair>()
+            {
+                new FieldValuePair
+                {
+                    Field = new FieldRef(123){
+                        FieldType = type
+                        },
+                    Value = new List<ChoiceRef>{new ChoiceRef("choice name") }
+                }
+            };
+
+            //ACT
+            var result = doc.ToDTODocument();
+
+            //ASSERT
+            Assert.Equal(expected, result.Fields.First().FieldType);
+
+        }
 
         [Fact]
         public void ToDTODocument_FieldValueIsMultiChoiceWithName_ResturnsValueAsRelativityChoice()

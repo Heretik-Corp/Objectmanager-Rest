@@ -16,7 +16,7 @@ namespace TestEventhandlers
 
             if (this.ActiveLayout.Name == layoutName && this.ActiveArtifact.IsLoaded(artifactId))
             {
-                this.ActiveArtifact.Fields[artifactId].Value.Value = "pre load value";
+                this.ActiveArtifact.Fields[artifactId].Value.Value = "EH pre load value works!!";
             }
 
             return new Response

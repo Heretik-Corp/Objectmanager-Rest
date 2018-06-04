@@ -61,8 +61,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArtifactHelpers.cs" />
     <Compile Include="PreLoadEventhandler.cs" />
     <Compile Include="PreSaveEventhandler.cs" />
+    <Compile Include="PresaveEventHandlerYesNo_2.cs" />
+    <Compile Include="PresaveEventHandlerYesNo_1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SQLUtilities.cs" />
   </ItemGroup>
