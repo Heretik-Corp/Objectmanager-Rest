@@ -2,6 +2,7 @@
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
+using ObjectManager.Rest.Exceptions;
 using ObjectManager.Rest.Interfaces;
 using ObjectManager.Rest.Interfaces.Authentication;
 using ObjectManager.Rest.V2.Models;

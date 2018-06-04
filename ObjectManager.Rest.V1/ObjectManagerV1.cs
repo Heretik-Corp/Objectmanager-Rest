@@ -1,10 +1,11 @@
-﻿using ObjectManager.Rest.Interfaces;
-using ObjectManager.Rest.Interfaces.Authentication;
-using ObjectManager.Rest.V1.Models;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
+using ObjectManager.Rest.Exceptions;
+using ObjectManager.Rest.Interfaces;
+using ObjectManager.Rest.Interfaces.Authentication;
+using ObjectManager.Rest.V1.Models;
 
 namespace ObjectManager.Rest.V1
 {
