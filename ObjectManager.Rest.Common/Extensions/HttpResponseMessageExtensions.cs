@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using ObjectManager.Rest.Exceptions;
 
 namespace ObjectManager.Rest
 {
-    public class EventHandlerFailedException : Exception
-    {
-        public EventHandlerFailedException(string message) : base(message) { }
-    }
     internal static class HttpResponseMessageExtensions
     {
         internal class ErrorEnvelope
@@ -39,6 +36,10 @@ namespace ObjectManager.Rest
             if (e.ErrorType == "Relativity.Services.Objects.Exceptions.EventHandlerFailedException")
             {
                 return new EventHandlerFailedException(e.Message);
+            }
+            else if (e.ErrorType == "Relativity.Services.Exceptions.ValidationException")
+            {
+                return new ValidationException(e.Message);
             }
             var str = Newtonsoft.Json.JsonConvert.SerializeObject(e);
             return new System.Exception(str);

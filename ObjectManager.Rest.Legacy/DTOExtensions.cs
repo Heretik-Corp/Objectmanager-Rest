@@ -27,12 +27,12 @@ namespace ObjectManager.Rest.Extensions
             {
                 // seems weird but staying consistant with how other versions of object manager 
                 // work so all extension methods act as expected
-                return Newtonsoft.Json.JsonConvert.SerializeObject(((Choice)value).ToChoice());
+                return Newtonsoft.Json.JsonConvert.SerializeObject(((Choice)value).ToChoiceRef());
             }
             if (value is MultiChoiceFieldValueList)
             {
                 var c = (MultiChoiceFieldValueList)value;
-                return Newtonsoft.Json.JsonConvert.SerializeObject(c.Select(x => x.ToChoice()).ToList());
+                return Newtonsoft.Json.JsonConvert.SerializeObject(c.Select(x => x.ToChoiceRef()).ToList());
             }
             return value;
         }
@@ -105,11 +105,15 @@ namespace ObjectManager.Rest.Extensions
             return choice;
         }
 
-        public static ChoiceRef ToChoice(this Choice choice)
+        public static ChoiceRef ToChoiceRef(this Choice choice)
         {
             var choiceRef = new ChoiceRef();
             choiceRef.ArtifactId = choice.ArtifactID;
-            choiceRef.Guids = choice.Guids?.ToList() ?? new List<Guid>();
+            choiceRef.Guids = null;
+            if (choice.Guids?.Any() ?? false)
+            {
+                choiceRef.Guids = choice.Guids?.ToList() ?? null;
+            }
             choiceRef.Name = choice.Name;
             return choiceRef;
         }
