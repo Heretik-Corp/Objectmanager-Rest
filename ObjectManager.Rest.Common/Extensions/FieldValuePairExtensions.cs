@@ -30,7 +30,11 @@ namespace ObjectManager.Rest.Extensions
             {
                 return null;
             }
-            var choices = Newtonsoft.Json.JsonConvert.DeserializeObject<IEnumerable<ChoiceRef>>(pair.Value.ToString());
+            else if (typeof(IEnumerable<ChoiceRef>).IsAssignableFrom(pair.Value?.GetType()))
+            {
+                return pair.Value as IEnumerable<ChoiceRef>;
+            }
+                var choices = Newtonsoft.Json.JsonConvert.DeserializeObject<IEnumerable<ChoiceRef>>(pair.Value.ToString());
             return choices;
         }
     }
