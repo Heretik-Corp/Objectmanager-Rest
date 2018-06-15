@@ -34,8 +34,13 @@ namespace ObjectManager
             }
             else
             {
-                return new RSAPIObjectManager(_helper);
+                return GetLegacyManager(_helper);
             }
+        }
+
+        protected IObjectManager GetLegacyManager(IHelper helper)
+        {
+            return new RSAPIObjectManager(_helper);
         }
         private static string GetRestUrl(IHelper helper)
         {
