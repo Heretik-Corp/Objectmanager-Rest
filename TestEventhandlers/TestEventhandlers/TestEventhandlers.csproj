@@ -63,6 +63,7 @@
   <ItemGroup>
     <Compile Include="ArtifactHelpers.cs" />
     <Compile Include="PreLoadEventhandler.cs" />
+    <Compile Include="PostSaveEventhandler.cs" />
     <Compile Include="PreSaveEventhandler.cs" />
     <Compile Include="PresaveEventHandlerYesNo_2.cs" />
     <Compile Include="PresaveEventHandlerYesNo_1.cs" />
