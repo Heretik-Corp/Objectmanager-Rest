@@ -1,11 +1,11 @@
-﻿using ObjectManager.Rest.Interfaces;
+﻿using System;
+using System.Threading.Tasks;
+using ObjectManager.Rest.Interfaces;
 using ObjectManager.Rest.Interfaces.Authentication;
 using ObjectManager.Rest.Legacy;
 using ObjectManager.Rest.V1;
 using ObjectManager.Rest.V2;
 using Relativity.API;
-using System;
-using System.Threading.Tasks;
 
 namespace ObjectManager
 {
@@ -22,7 +22,7 @@ namespace ObjectManager
         public virtual async Task<IObjectManager> GetObjectManagerAsync(IAuthentication authentication)
         {
             var version = await _versionResolver.GetRelativityVersionAsync();
-            if (version >= new Version("9.5.287.43") && version < new Version("9.6.50.31"))
+            if (version >= new Version("9.5.411.4") && version < new Version("9.6.50.31"))
             {
                 var host = GetRestUrl(_helper);
                 return new ObjectManagerV1(host, authentication);
