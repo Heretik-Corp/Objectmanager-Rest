@@ -1,14 +1,16 @@
-﻿using kCura.Relativity.Client;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using kCura.Relativity.Client;
+using kCura.Relativity.Client.DTOs;
 using ObjectManager.Rest.Extensions;
+using ObjectManager.Rest.Interfaces;
 using ObjectManager.Rest.Interfaces.Models;
 using ObjectManager.Rest.Legacy.Tests.Integration.TestFixtures;
 using ObjectManager.Rest.Tests.Integration.Common;
 using ObjectManager.Rest.Tests.Integration.Common.Extensions;
 using ObjectManager.Rest.Tests.Integration.Common.TestFixtures;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Xunit;
 using Xunit.Categories;
 
@@ -56,6 +58,40 @@ namespace ObjectManager.Rest.Legacy.Tests.Integration
             Assert.Equal(_creation.DocIds.Single(), result.ArtifactId);
         }
 
+        #region SingleObject
+        [Fact]
+        public async Task UpdateAsync_UpdateSingleObjectByArtifactId_ReturnsSuccess()
+        {
+            //ARRANGE
+            var fieldGuid = Guid.Parse(DocumentFieldDefinitions.SingleObject);
+            var client = _fixture.Helper.GetServicesManager().CreateProxy<IRSAPIClient>(Relativity.API.ExecutionIdentity.System);
+            client.APIOptions.WorkspaceID = _fixture.WorkspaceId;
+            var obj = client.Repositories.RDO.CreateSingle(new RDO
+            {
+                ArtifactTypeGuids = new List<Guid> { Guid.Parse(ObjectTypeGuids.SingleObject) },
+                TextIdentifier = Guid.NewGuid().ToString()
+            });
+
+            //ACT
+            var value = new RelativityObject()
+            {
+                ArtifactId = obj
+            };
+            var (uResult, result) = await SharedTestCases.RunUpdateTestAsync(_manager,
+                _fixture.WorkspaceId,
+                _creation.DocIds.First(),
+                new FieldRef(fieldGuid),
+                value);
+
+            //ASSERT
+            Assert.True(uResult.EventHandlerStatuses.All(x => x.Success));
+            Assert.Equal(_creation.DocIds.Single(), result.ArtifactId);
+            Assert.Contains(result.FieldValues, (f) => f.Field.Guids.Contains(fieldGuid));
+            Assert.Equal(obj, result[fieldGuid].ValueAsSingleObject().ArtifactId);
+        }
+
+        #endregion
+
         #region SingleChoice
         [Fact]
         public async Task UpdateAsync_UpdateSingleChoiceByGuidUsingChoiceArtifactId_ReturnsSuccess()
@@ -68,7 +104,7 @@ namespace ObjectManager.Rest.Legacy.Tests.Integration
 
             //ACT
             var value = new ChoiceRef(choice.ArtifactID);
-            var (uResult, result) = await SharedTestCases.RunUpateTestAsync(_manager,
+            var (uResult, result) = await SharedTestCases.RunUpdateTestAsync(_manager,
                 _fixture.WorkspaceId,
                 _creation.DocIds.First(),
                 new FieldRef(fieldGuid),
@@ -90,7 +126,7 @@ namespace ObjectManager.Rest.Legacy.Tests.Integration
 
             //ACT
             var value = new ChoiceRef(Guid.Parse(SingleChoiceChoiceDefinitions.Single1));
-            var (uResult, result) = await SharedTestCases.RunUpateTestAsync(_manager,
+            var (uResult, result) = await SharedTestCases.RunUpdateTestAsync(_manager,
                 _fixture.WorkspaceId,
                 _creation.DocIds.First(),
                 new FieldRef(fieldGuid),
@@ -104,6 +140,25 @@ namespace ObjectManager.Rest.Legacy.Tests.Integration
         }
 
         #endregion
+
+        #region Multi Object
+        [Fact]
+        public Task UpdateAsync_UpdateMultiObjectByArtifactId_ReturnsSuccess()
+        {
+            return _manager.UpdateAsync_UpdateMultiObjectByArtifactId_ReturnsSuccess(_fixture.Helper, _fixture.WorkspaceId, _creation.DocIds.First());
+        }
+        #endregion
+
+
+
+        #region User
+        [Fact]
+        public Task UpdateAsync_UpdateUserByArtifactId_ReturnsSuccess()
+        {
+            return _manager.UpdateAsync_UpdateUserByArtifactId_ReturnsSuccess(_fixture.Helper, _fixture.WorkspaceId, _creation.DocIds.First(), _fixture.UserName);
+        }
+        #endregion
+
 
         #region MultiChoice
 
@@ -250,7 +305,41 @@ namespace ObjectManager.Rest.Legacy.Tests.Integration
             Assert.Equal(_creation.DocIds.Single(), result.ArtifactId);
             Assert.Contains(result.FieldValues, (f) => f.Field.Name == field.Name);
             Assert.Equal(expected.ToString(), result[field.ArtifactID].Value.ToString().Trim('0'));
+        }
 
+        public async Task UpdateAsyncSingleObject_UpdateFieldByName_ReturnsSuccess()
+        {
+            //ARRANGE
+            var fieldGuid = Guid.Parse(DocumentFieldDefinitions.SingleObject);
+            var client = _fixture.Helper.GetServicesManager().CreateProxy<IRSAPIClient>(Relativity.API.ExecutionIdentity.System);
+            client.APIOptions.WorkspaceID = _fixture.WorkspaceId;
+            var field = client.Repositories.Field.ReadSingle(fieldGuid);
+
+            //ACT
+            var obj = new Interfaces.RelativityObject
+            {
+                ArtifactId = _creation.DocIds.Single(),
+                FieldValues = new List<FieldValuePair>
+                {
+                    new FieldValuePair
+                    {
+                        Field = new FieldRef(field.Name),
+                        Value = new RelativityObject
+                        {
+
+                        }
+                    }
+                }
+            };
+
+            var uResult = await _manager.UpdateAsync(_fixture.WorkspaceId, obj, null);
+            var result = await _manager.ReadAsync(_fixture.WorkspaceId, obj, null);
+
+            //ASSERT
+            Assert.True(uResult.EventHandlerStatuses.All(x => x.Success));
+            Assert.Equal(_creation.DocIds.Single(), result.ArtifactId);
+            Assert.Contains(result.FieldValues, (f) => f.Field.Name == field.Name);
+            // Assert.Equal(expected.ToString(), result[field.ArtifactID].Value.ToString().Trim('0'));
         }
 
         #endregion

@@ -96,6 +96,8 @@ namespace ObjectManager.Rest.Legacy.Tests.Unit
             Assert.Equal(123, result.FieldValues.Single().Field.ArtifactId);
         }
 
+
+
         [Fact]
         public void ToRelativityObject_FieldValueIsChoiceWithArtifactId_ResturnsValueAsChoice()
         {
@@ -190,7 +192,84 @@ namespace ObjectManager.Rest.Legacy.Tests.Unit
         }
 
 
+        [Fact]
+        public void ToRelativityObject_FieldValueIsSingleObject_ResturnsValueAsRelativityObject()
+        {
+            //ARRANGE
+            var doc = new Document();
+            doc.Fields = new List<FieldValue>();
+            doc.Fields.Add(new FieldValue(123, new Artifact(1234), true));
 
+            //ACT
+            var result = doc.ToRelativityObject();
+
+            //ASSERT
+            Assert.NotEmpty(result.FieldValues);
+            Assert.NotNull(result.FieldValues.SingleOrDefault()?.Field);
+            Assert.Equal(123, result.FieldValues.Single().Field.ArtifactId);
+            Assert.Equal(1234, result[123].ValueAsSingleObject().ArtifactId);
+        }
+
+        [Fact]
+        public void ToRelativityObject_FieldValueIsMultiObject_ResturnsValueAsRelativityObject()
+        {
+            //ARRANGE
+            var doc = new Document();
+            doc.Fields = new List<FieldValue>();
+            doc.Fields.Add(new FieldValue(123, new List<Artifact> { new Artifact(1234) }, true));
+
+            //ACT
+            var result = doc.ToRelativityObject();
+
+            //ASSERT
+            Assert.NotEmpty(result.FieldValues);
+            Assert.NotNull(result.FieldValues.SingleOrDefault()?.Field);
+            Assert.Equal(123, result.FieldValues.Single().Field.ArtifactId);
+            Assert.Equal(1234, result[123].ValueAsMultiObject().First().ArtifactId);
+        }
+
+
+
+        #endregion
+
+
+        #region Single Object
+        [Fact]
+        public void ValueAsSingleObject_FieldValueIsSingleObject_ReturnsValueAsRelativityObject()
+        {
+            //ARRANGE
+            var pair = new FieldValuePair();
+            pair.Value = new RelativityObject
+            {
+                ArtifactId = 123
+            };
+
+            //ACT
+            var r = pair.ValueAsSingleObject();
+
+            //ASSERT
+            Assert.IsType<RelativityObject>(r);
+            Assert.Equal(123, r.ArtifactId);
+        }
+
+        [Fact]
+        public void ValueAsSingleObject_FieldValueIsSingleObjectString_ReturnsValueAsRelativityObject()
+        {
+            //ARRANGE
+            var pair = new FieldValuePair();
+            pair.Value = @"{ 
+                             ""ArtifactID"":123,
+                             ""Guids"":[],
+                             ""Name"":""Single 1""
+                          }";
+
+            //ACT
+            var r = pair.ValueAsSingleObject();
+
+            //ASSERT
+            Assert.IsType<RelativityObject>(r);
+            Assert.Equal(123, r.ArtifactId);
+        }
         #endregion
 
         #region ToDTODocument

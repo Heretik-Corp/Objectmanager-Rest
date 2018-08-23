@@ -33,6 +33,22 @@ namespace ObjectManager.Rest.Extensions
                 var c = (MultiChoiceFieldValueList)value;
                 return c.Select(x => x.ToChoiceRef()).ToList();
             }
+            if (value is Artifact)
+            {
+                var v = value as Artifact;
+                return new RelativityObject
+                {
+                    ArtifactId = v.ArtifactID
+                };
+            }
+            if (value.IsEnumerableOf<Artifact>())
+            {
+                var v = value as IEnumerable<Artifact>;
+                return v.Select(x => new RelativityObject
+                {
+                    ArtifactId = x.ArtifactID
+                }).ToList();
+            }
             return value;
         }
 
@@ -51,13 +67,35 @@ namespace ObjectManager.Rest.Extensions
             {
                 return Newtonsoft.Json.JsonConvert.DeserializeObject<ChoiceRef>(value.ToString() ?? string.Empty).ToRelativityChoice();
             }
-            else if (typeof(IEnumerable<ChoiceRef>).IsAssignableFrom(value.GetType()))
+            else if (value.IsEnumerableOf<ChoiceRef>())
             {
                 return ParseMultiChoice(((IEnumerable<ChoiceRef>)value));
             }
             else if (fieldType == kCura.Relativity.Client.FieldType.MultipleChoice && ((vType == typeof(string)) || vType == typeof(JArray)))
             {
                 return ParseMultiChoice(Newtonsoft.Json.JsonConvert.DeserializeObject<IEnumerable<ChoiceRef>>(value.ToString() ?? string.Empty));
+            }
+            else if (value is RelativityObject)
+            {
+                var v = (RelativityObject)value;
+                return new RDO(v.ArtifactId);
+            }
+            else if (value.IsEnumerableOf<RelativityObject>())
+            {
+                var v = (IEnumerable<RelativityObject>)value;
+                return new FieldValueList<RDO>(v.Select(x => new RDO(x.ArtifactId)).ToList());
+            }
+            else if (fieldType == kCura.Relativity.Client.FieldType.SingleObject && ((vType == typeof(string)) || vType == typeof(RelativityObject)))
+            {
+                throw new NotImplementedException();
+            }
+            else if (fieldType == kCura.Relativity.Client.FieldType.MultipleObject)
+            {
+                throw new NotImplementedException();
+            }
+            else if (fieldType == kCura.Relativity.Client.FieldType.User)
+            {
+                throw new NotImplementedException();
             }
             return value;
         }
@@ -102,6 +140,7 @@ namespace ObjectManager.Rest.Extensions
             retDoc.Fields = doc.FieldValues.Select(x => ToFieldValue(x)).ToList();
             return retDoc;
         }
+
         public static Choice ToRelativityChoice(this ChoiceRef choiceRef)
         {
             if (choiceRef == null)
@@ -122,10 +161,10 @@ namespace ObjectManager.Rest.Extensions
         {
             var choiceRef = new ChoiceRef();
             choiceRef.ArtifactId = choice.ArtifactID;
-            choiceRef.Guids = null;
+            choiceRef.Guids = new List<Guid>();
             if (choice.Guids?.Any() ?? false)
             {
-                choiceRef.Guids = choice.Guids?.ToList() ?? null;
+                choiceRef.Guids = choice.Guids?.ToList() ?? new List<Guid>();
             }
             choiceRef.Name = choice.Name;
             return choiceRef;

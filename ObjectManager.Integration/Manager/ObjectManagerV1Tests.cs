@@ -58,30 +58,37 @@ namespace ObjectManager.Rest.V1.Tests.Integration.Manager
 
         #endregion
 
+
+        #region Single Object
+        [Fact]
+        public Task UpdateAsync_UpdateSingleObjectByArtifactId_ReturnsSuccess()
+        {
+            return _manager.UpdateAsync_UpdateSingleObjectByArtifactId_ReturnsSuccess(_fixture.Helper, _fixture.WorkspaceId, _creation.DocIds.First());
+        }
+
+        #endregion
+
+        #region User
+        [Fact]
+        public Task UpdateAsync_UpdateUserByArtifactId_ReturnsSuccess()
+        {
+            return _manager.UpdateAsync_UpdateUserByArtifactId_ReturnsSuccess(_fixture.Helper, _fixture.WorkspaceId, _creation.DocIds.First(), _fixture.UserName);
+        }
+        #endregion
+
+        #region Multi Object
+        [Fact]
+        public Task UpdateAsync_UpdateMultiObjectByArtifactId_ReturnsSuccess()
+        {
+            return _manager.UpdateAsync_UpdateMultiObjectByArtifactId_ReturnsSuccess(_fixture.Helper, _fixture.WorkspaceId, _creation.DocIds.First());
+        }
+        #endregion
+
         #region SingleChoice
         [Fact]
-        public async Task UpdateAsync_UpdateSingleChoiceByGuidUsingChoiceArtifactId_ReturnsSuccess()
+        public Task UpdateAsync_UpdateSingleChoiceByGuidUsingChoiceArtifactId_ReturnsSuccess()
         {
-            //ARRANGE
-            var fieldGuid = Guid.Parse(DocumentFieldDefinitions.SingleChoice);
-            var client = _fixture.Helper.GetServicesManager().CreateProxy<IRSAPIClient>(Relativity.API.ExecutionIdentity.System);
-            client.APIOptions.WorkspaceID = _fixture.WorkspaceId;
-            var choice = client.Repositories.Choice.ReadSingle(Guid.Parse(SingleChoiceChoiceDefinitions.Single1));
-
-            //ACT
-            var value = new ChoiceRef(choice.ArtifactID);
-            var (uResult, result) = await SharedTestCases.RunUpateTestAsync(_manager,
-                _fixture.WorkspaceId,
-                _creation.DocIds.First(),
-                new FieldRef(fieldGuid),
-                value);
-
-            //ASSERT
-            Assert.True(uResult.EventHandlerStatuses.All(x => x.Success));
-            Assert.Equal(_creation.DocIds.Single(), result.ArtifactId);
-            Assert.Contains(result.FieldValues, (f) => f.Field.Guids.Contains(fieldGuid));
-            Assert.Equal(choice.ArtifactID, result[fieldGuid].ValueAsSingleChoice().ArtifactId);
-
+            return _manager.UpdateAsync_UpdateSingleChoiceByGuidUsingChoiceArtifactId_ReturnsSuccess(_fixture.Helper, _fixture.WorkspaceId, _creation.DocIds.First());
         }
 
         [Fact]
@@ -92,7 +99,7 @@ namespace ObjectManager.Rest.V1.Tests.Integration.Manager
 
             //ACT
             var value = new ChoiceRef(Guid.Parse(SingleChoiceChoiceDefinitions.Single1));
-            var (uResult, result) = await SharedTestCases.RunUpateTestAsync(_manager,
+            var (uResult, result) = await SharedTestCases.RunUpdateTestAsync(_manager,
                 _fixture.WorkspaceId,
                 _creation.DocIds.First(),
                 new FieldRef(fieldGuid),

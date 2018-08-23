@@ -51,7 +51,7 @@ namespace ObjectManager.Rest.V2.Tests.Integration
             //ACT
             var result = await _manager.ReadAsync(_fixture.WorkspaceId, new Interfaces.RelativityObject
             {
-                ArtifactId = _creation.DocIds.Single()
+                ArtifactId = _creation.DocIds.First()
             }, null);
 
             //ASSERT
@@ -64,27 +64,9 @@ namespace ObjectManager.Rest.V2.Tests.Integration
 
         #region SingleChoice
         [Fact]
-        public async Task UpdateAsync_UpdateSingleChoiceByGuidUsingChoiceArtifactId_ReturnsSuccess()
+        public Task UpdateAsync_UpdateSingleChoiceByGuidUsingChoiceArtifactId_ReturnsSuccess()
         {
-            //ARRANGE
-            var fieldGuid = Guid.Parse(DocumentFieldDefinitions.SingleChoice);
-            var client = _fixture.Helper.GetServicesManager().CreateProxy<IRSAPIClient>(Relativity.API.ExecutionIdentity.System);
-            client.APIOptions.WorkspaceID = _fixture.WorkspaceId;
-            var choice = client.Repositories.Choice.ReadSingle(Guid.Parse(SingleChoiceChoiceDefinitions.Single1));
-
-            //ACT
-            var value = new ChoiceRef(choice.ArtifactID);
-            var (uResult, result) = await SharedTestCases.RunUpateTestAsync(_manager,
-                _fixture.WorkspaceId,
-                _creation.DocIds.First(),
-                new FieldRef(fieldGuid),
-                value);
-
-            //ASSERT
-            Assert.True(uResult.EventHandlerStatuses.All(x => x.Success));
-            Assert.Equal(_creation.DocIds.Single(), result.ArtifactId);
-            Assert.Contains(result.FieldValues, (f) => f.Field.Guids.Contains(fieldGuid));
-            Assert.Equal(choice.ArtifactID, result[fieldGuid].ValueAsSingleChoice().ArtifactId);
+            return _manager.UpdateAsync_UpdateSingleChoiceByGuidUsingChoiceArtifactId_ReturnsSuccess(_fixture.Helper, _fixture.WorkspaceId, _creation.DocIds.First());
         }
 
         [Fact]
@@ -95,7 +77,7 @@ namespace ObjectManager.Rest.V2.Tests.Integration
 
             //ACT
             var value = new ChoiceRef(Guid.Parse(SingleChoiceChoiceDefinitions.Single1));
-            var (uResult, result) = await SharedTestCases.RunUpateTestAsync(_manager,
+            var (uResult, result) = await SharedTestCases.RunUpdateTestAsync(_manager,
                 _fixture.WorkspaceId,
                 _creation.DocIds.First(),
                 new FieldRef(fieldGuid),
@@ -108,6 +90,31 @@ namespace ObjectManager.Rest.V2.Tests.Integration
             Assert.Equal(value.Guids.First(), result[fieldGuid].ValueAsSingleChoice().Guids.First());
         }
 
+        #endregion
+
+        #region Single Object
+        [Fact]
+        public Task UpdateAsync_UpdateSingleObjectByArtifactId_ReturnsSuccess()
+        {
+            return _manager.UpdateAsync_UpdateSingleObjectByArtifactId_ReturnsSuccess(_fixture.Helper, _fixture.WorkspaceId, _creation.DocIds.First());
+        }
+
+        #endregion
+
+        #region User
+        [Fact]
+        public Task UpdateAsync_UpdateUserByArtifactId_ReturnsSuccess()
+        {
+            return _manager.UpdateAsync_UpdateUserByArtifactId_ReturnsSuccess(_fixture.Helper, _fixture.WorkspaceId, _creation.DocIds.First(), _fixture.UserName);
+        }
+        #endregion
+
+        #region Multi Object
+        [Fact]
+        public Task UpdateAsync_UpdateMultiObjectByArtifactId_ReturnsSuccess()
+        {
+            return _manager.UpdateAsync_UpdateMultiObjectByArtifactId_ReturnsSuccess(_fixture.Helper, _fixture.WorkspaceId, _creation.DocIds.First());
+        }
         #endregion
 
         #region MultiChoice
@@ -123,7 +130,7 @@ namespace ObjectManager.Rest.V2.Tests.Integration
                 new ChoiceRef(Guid.Parse(MultiChoiceChoiceDefinitions.Multi1)),
                 new ChoiceRef(Guid.Parse(MultiChoiceChoiceDefinitions.Multi2))
             };
-            var (uResult, result) = await SharedTestCases.RunUpateTestAsync(_manager,
+            var (uResult, result) = await SharedTestCases.RunUpdateTestAsync(_manager,
                     _fixture.WorkspaceId,
                     _creation.DocIds.First(),
                     new FieldRef(fieldGuid),
@@ -156,7 +163,7 @@ namespace ObjectManager.Rest.V2.Tests.Integration
             _installFixture.Init(_fixture.WorkspaceId, ApplicationInstallContext.FieldTestPath);
 
             //ACT
-            var (uResult, result) = await SharedTestCases.RunUpateTestAsync(
+            var (uResult, result) = await SharedTestCases.RunUpdateTestAsync(
                 _manager,
                 _fixture.WorkspaceId,
                 _creation.DocIds.First(),
@@ -205,28 +212,7 @@ namespace ObjectManager.Rest.V2.Tests.Integration
         [Fact]
         public async Task UpdateAsync_CallingContextSetLayoutHasEventhandlerError_ReturnsCorrectStatus()
         {
-            //ARRANGE
-            var fieldGuid = Guid.Parse(DocumentFieldDefinitions.YesNo);
-            _creation.Create(_fixture.WorkspaceId, 1);
-            _installFixture.Init(_fixture.WorkspaceId, ApplicationInstallContext.FieldTestPath);
-            var client = _fixture.Helper.GetServicesManager().CreateProxy<IRSAPIClient>(Relativity.API.ExecutionIdentity.System);
-            client.APIOptions.WorkspaceID = _fixture.WorkspaceId;
-
-            var query = new Query<Layout>();
-            query.Condition = new TextCondition(LayoutFieldNames.TextIdentifier, TextConditionEnum.EqualTo, "Layout with eventhandler");
-            query.Fields = FieldValue.AllFields;
-            var layout = client.Repositories.Layout.Query(query).Results.First().Artifact;
-
-            //ACT
-            var obj = SharedTestCases.CreateTestObject(
-                _creation.DocIds.First(),
-                new FieldRef(fieldGuid),
-                true);
-
-            var result = await _manager.UpdateAsync(_fixture.WorkspaceId, obj, new Interfaces.CallingContext
-            {
-                Layout = new Interfaces.LayoutRef(layout.Name, layout.ArtifactID)
-            });
+            var result = await _manager.UpdateAsync_CallingContextSetLayoutHasEventhandlerError_ReturnsCorrectStatus(_fixture.Helper, _fixture.WorkspaceId, _creation.DocIds.First());
 
             //ASSERT
             Assert.Contains(result.EventHandlerStatuses, x => !x.Success);
@@ -262,7 +248,7 @@ namespace ObjectManager.Rest.V2.Tests.Integration
             var field = client.Repositories.Field.ReadSingle(fieldGuid);
 
             //ACT
-            var (uResult, result) = await SharedTestCases.RunUpateTestAsync(_manager, _fixture.WorkspaceId, _creation.DocIds.First(), new FieldRef(field.ArtifactID), value);
+            var (uResult, result) = await SharedTestCases.RunUpdateTestAsync(_manager, _fixture.WorkspaceId, _creation.DocIds.First(), new FieldRef(field.ArtifactID), value);
 
             //ASSERT
             Assert.True(uResult.EventHandlerStatuses.All(x => x.Success));
@@ -288,7 +274,7 @@ namespace ObjectManager.Rest.V2.Tests.Integration
             var field = client.Repositories.Field.ReadSingle(fieldGuid);
 
             //ACT
-            var (uResult, result) = await SharedTestCases.RunUpateTestAsync(_manager, _fixture.WorkspaceId, _creation.DocIds.First(), new FieldRef(field.ArtifactID), value);
+            var (uResult, result) = await SharedTestCases.RunUpdateTestAsync(_manager, _fixture.WorkspaceId, _creation.DocIds.First(), new FieldRef(field.ArtifactID), value);
 
             //ASSERT
             Assert.True(uResult.EventHandlerStatuses.All(x => x.Success));

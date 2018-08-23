@@ -1,7 +1,8 @@
-﻿using ObjectManager.Rest.Interfaces.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ObjectManager.Rest.Interfaces;
+using ObjectManager.Rest.Interfaces.Models;
 
 namespace ObjectManager.Rest.V1
 {
@@ -26,6 +27,14 @@ namespace ObjectManager.Rest.V1
             return new MultipleChoiceFieldUpdateValue
             {
                 Choices = (IEnumerable<RChoice>)base.ParseMultiChoice(choices),
+                Behavior = FieldUpdateBehavior.Replace
+            };
+        }
+        protected override object ParseMultiObject(IEnumerable<RelativityObject> obj)
+        {
+            return new MultipleObjectFieldUpdateValue
+            {
+                Objects = (IEnumerable<RField>)base.ParseMultiObject(obj),
                 Behavior = FieldUpdateBehavior.Replace
             };
         }
