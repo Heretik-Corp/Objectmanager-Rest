@@ -142,7 +142,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DTOExtensionsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -161,6 +161,7 @@
     <Compile Include="ConfigHelper.cs" />
     <Compile Include="Extensions\HelperExtensions.cs" />
     <Compile Include="Extensions\ObjectManagerTestExtensions.cs" />
+    <Compile Include="Extensions\ToDTOExtensionTests.cs" />
     <Compile Include="FieldDefinitions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SharedTestCases.cs" />

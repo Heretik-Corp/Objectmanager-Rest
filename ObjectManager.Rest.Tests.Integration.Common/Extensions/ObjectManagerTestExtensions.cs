@@ -97,14 +97,12 @@ namespace ObjectManager.Rest.Tests.Integration.Common.Extensions
 
             var q = new Query<Group>();
             q.ArtifactTypeID = (int)kCura.Relativity.Client.ArtifactType.Group;
-            q.Fields = FieldValue.AllFields;
             q.Condition = new kCura.Relativity.Client.CompositeCondition(new kCura.Relativity.Client.WholeNumberCondition(GroupFieldNames.GroupType, kCura.Relativity.Client.NumericConditionEnum.EqualTo, 2),
                                                                        kCura.Relativity.Client.CompositeConditionEnum.And,
                                                                       new kCura.Relativity.Client.ObjectsCondition(GroupFieldNames.Workspaces, kCura.Relativity.Client.ObjectsConditionEnum.AnyOfThese, new int[] { workspaceId }));
             var res = client.Repositories.Group.Query(q);
 
             var userQ = new Query<kCura.Relativity.Client.DTOs.User>();
-            userQ.Fields = FieldValue.AllFields;
             userQ.Condition = new ObjectsCondition(UserFieldNames.Groups, ObjectsConditionEnum.AnyOfThese, res.Results.Select(x => x.Artifact.ArtifactID).ToList());
             var userRes = client.Repositories.User.Query(userQ);
             if (userRes.TotalCount < 1)

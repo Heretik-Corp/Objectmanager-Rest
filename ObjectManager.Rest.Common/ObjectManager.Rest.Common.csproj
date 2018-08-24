@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Exceptions\EventHandlerFailedException.cs" />
+    <Compile Include="Extensions\DTOExtensions.cs" />
     <Compile Include="Extensions\FieldValuePairExtensions.cs" />
     <Compile Include="Extensions\HttpResponseMessageExtensions.cs" />
     <Compile Include="Exceptions\ValidationException.cs" />

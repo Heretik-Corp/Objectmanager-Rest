@@ -171,6 +171,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ObjectManagerV2Tests.cs" />
+    <Compile Include="ObjectManagerV2Tests.TODTODocumentTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestFixtures\WorkspaceSetupFixture.cs" />
   </ItemGroup>

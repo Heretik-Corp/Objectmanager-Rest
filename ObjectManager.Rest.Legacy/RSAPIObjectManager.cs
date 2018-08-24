@@ -1,10 +1,10 @@
-﻿using ObjectManager.Rest.Extensions;
+﻿using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using ObjectManager.Rest.Extensions;
 using ObjectManager.Rest.Interfaces;
 using ObjectManager.Rest.Legacy.Extensions;
 using Relativity.API;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace ObjectManager.Rest.Legacy
 {
