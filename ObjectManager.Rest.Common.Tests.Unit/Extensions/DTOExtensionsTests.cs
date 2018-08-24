@@ -114,7 +114,7 @@ namespace ObjectManager.Rest.Legacy.Tests.Unit
             Assert.NotNull(result.FieldValues.SingleOrDefault()?.Field);
             Assert.Equal(123, result.FieldValues.Single().Field.ArtifactId);
             Assert.Equal(456, result[123].ValueAsSingleChoice().ArtifactId);
-            Assert.Null(result[123].ValueAsSingleChoice().Guids);
+            Assert.Empty(result[123].ValueAsSingleChoice().Guids);
         }
 
         [Fact]
