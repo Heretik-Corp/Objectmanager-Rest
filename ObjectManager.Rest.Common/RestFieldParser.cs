@@ -1,7 +1,9 @@
-﻿using ObjectManager.Rest.Interfaces.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ObjectManager.Rest.Extensions;
+using ObjectManager.Rest.Interfaces;
+using ObjectManager.Rest.Interfaces.Models;
 using static ObjectManager.Rest.RField;
 
 namespace ObjectManager.Rest
@@ -13,6 +15,15 @@ namespace ObjectManager.Rest
             public MultipleChoiceFieldUpdateValue() { }
 
             public IEnumerable<RChoice> Choices { get; set; }
+
+            public string Behavior { get; set; }
+        }
+
+        internal class MultipleObjectFieldUpdateValue
+        {
+            public MultipleObjectFieldUpdateValue() { }
+
+            public IEnumerable<RField> Objects { get; set; }
 
             public string Behavior { get; set; }
         }
@@ -44,7 +55,7 @@ namespace ObjectManager.Rest
             {
                 return this.ParseChoice((ChoiceRef)value);
             }
-            else if (typeof(IEnumerable<ChoiceRef>).IsAssignableFrom(value.GetType()))
+            else if (value.IsEnumerableOf<ChoiceRef>())
             {
                 return ParseMultiChoice(((IEnumerable<ChoiceRef>)value));
             }
@@ -52,8 +63,27 @@ namespace ObjectManager.Rest
             {
                 return ((DateTime)value).ToString("yyyy-MM-ddTHH:mm:ss.ffZ");
             }
+            else if (value is RelativityObject)
+            {
+                return ParseSingleObject((RelativityObject)value);
+            }
+            else if (value.IsEnumerableOf<RelativityObject>())
+            {
+                var r = value as IEnumerable<RelativityObject>;
+                return ParseMultiObject(r);
+            }
             return value;
         }
+        protected virtual object ParseSingleObject(RelativityObject obj)
+        {
+            return new RField.ArtifactIdRestField(obj.ArtifactId);
+        }
+
+        protected virtual object ParseMultiObject(IEnumerable<RelativityObject> obj)
+        {
+            return obj.Select(x => new RField.ArtifactIdRestField(x.ArtifactId)).ToList();
+        }
+
         protected virtual object ParseMultiChoice(IEnumerable<ChoiceRef> choices)
         {
             return choices.Select(x => this.ParseChoice(x)).ToList();

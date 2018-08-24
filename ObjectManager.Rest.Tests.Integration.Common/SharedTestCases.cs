@@ -23,7 +23,7 @@ namespace ObjectManager.Rest.Tests.Integration.Common
             };
             return obj;
         }
-        public static async Task<(ObjectUpdateResult, RelativityObject)> RunUpateTestAsync(IObjectManager manager, int workspaceId, int documentId, FieldRef field, object value)
+        public static async Task<(ObjectUpdateResult, RelativityObject)> RunUpdateTestAsync(IObjectManager manager, int workspaceId, int documentId, FieldRef field, object value)
         {
             var obj = CreateTestObject(documentId, field, value);
             var uResult = await manager.UpdateAsync(workspaceId, obj, null);

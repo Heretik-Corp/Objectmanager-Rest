@@ -1,15 +1,31 @@
-﻿using Relativity.API;
+﻿using System;
+using System.Configuration;
+using Relativity.API;
+using Relativity.Test.Helpers;
 
 namespace ObjectManager.Rest.Tests.Integration.Common.TestFixtures
 {
-    public class WorkspaceSetupFixtureHelper
+    public class WorkspaceSetupFixtureHelper : IDisposable
     {
         public const string CollectionName = "Workspace Collection";
-        public int WorkspaceId { get; private set; }
-        public IHelper Helper { get; private set; }
+        protected readonly string WorkspaceName = "Integration test";
+        public int WorkspaceId { get; protected set; }
+        public IHelper Helper { get; protected set; }
+        public string UserName { get; set; } = ConfigurationManager.AppSettings["AdminUsername"];
 
+        public WorkspaceSetupFixtureHelper()
+        {
+            Setup();
+        }
 
-        public static int SetupEnvironment(IHelper helper, string workspaceName)
+        protected virtual void Setup()
+        {
+            var helper = new TestHelper();
+            this.Helper = helper;
+            this.WorkspaceId = SetupEnvironment(helper, WorkspaceName);
+        }
+
+        public int SetupEnvironment(IHelper helper, string workspaceName)
         {
             //Create workspace
             var workspaceId = Relativity.Test.Helpers.WorkspaceHelpers.CreateWorkspace.CreateWorkspaceAsync(
@@ -22,12 +38,17 @@ namespace ObjectManager.Rest.Tests.Integration.Common.TestFixtures
             return workspaceId;
         }
 
-        public static void TearDown(int workspaceId, IHelper helper)
+        public void TearDown(int workspaceId, IHelper helper)
         {
             Relativity.Test.Helpers.WorkspaceHelpers.DeleteWorkspace.DeleteTestWorkspace(workspaceId,
                                 helper.GetServicesManager(),
                                 Relativity.Test.Helpers.SharedTestHelpers.ConfigurationHelper.ADMIN_USERNAME,
                                 Relativity.Test.Helpers.SharedTestHelpers.ConfigurationHelper.DEFAULT_PASSWORD);
+        }
+
+        public void Dispose()
+        {
+            TearDown(this.WorkspaceId, this.Helper);
         }
     }
 }

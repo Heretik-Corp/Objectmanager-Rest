@@ -19,6 +19,14 @@ namespace ObjectManager.Rest.Tests.Integration.Common
     public class LayoutDefinitions
     {
         public const string Default = "0FAE5FF4-053E-4D16-976D-DB4B5676F30F";
+        public const string EventHandlerErrorOnYes = "A70ED5F2-47CF-4DED-985E-2DABE6679C5C";
+        public const string PreloadPopulatesLongText = "F59829F7-CCAF-4F1C-8439-FA7EB33A8ECE";
+    }
+
+    public class ObjectTypeGuids
+    {
+        public const string SingleObject = "F457B152-8FE3-4BA7-9E83-ADD88095EE8D";
+        public const string MultiObject = "D449CD7D-8CD5-4F67-AD9F-7F8E1509356C";
     }
 
     public class DocumentFieldDefinitions
@@ -32,6 +40,9 @@ namespace ObjectManager.Rest.Tests.Integration.Common
         public const string YesNo = "1EE3A20E-F2A9-4233-8C81-5D399A0CFF8C";
         public const string SingleChoice = "CFE7ADBC-4B30-4975-928D-2D9779743BCD";
         public const string Multichoice = "72FDCAFC-1ABA-4E79-8D8B-EB1FB553E413";
+        public const string SingleObject = "11D82BF5-B7B1-4871-BD9E-E19BE459A4A4";
+        public const string User = "36B4E153-4BAC-4DD3-A5BB-D8A3CABF85DC";
+        public const string MultiObject = "30D5FC7F-F88C-4F16-849F-77E7BC6A1731";
 
         public static IEnumerable<object[]> FieldTestData
         {

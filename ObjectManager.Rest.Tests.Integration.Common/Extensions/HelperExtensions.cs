@@ -18,5 +18,13 @@ namespace ObjectManager.Rest.Tests.Integration.Common.Extensions
 
             return helper.GetDBContext(workspaceId).ExecuteSqlStatementAsScalar<string>(sql, new SqlParameter("@ag", artifactGuid));
         }
+        public static int GetArtifactId(this IHelper helper, int workspaceId, Guid artifactGuid)
+        {
+            var sql = @"select a.artifactId from eddsdbo.Artifact a
+                        join ArtifactGuid ag on a.ArtifactID = ag.ArtifactID
+                        where ArtifactGuid = @ag";
+
+            return helper.GetDBContext(workspaceId).ExecuteSqlStatementAsScalar<int>(sql, new SqlParameter("@ag", artifactGuid));
+        }
     }
 }
