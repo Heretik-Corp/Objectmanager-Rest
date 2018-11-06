@@ -18,6 +18,13 @@ namespace ObjectManager.Rest
             {
                 var text = await message.Content.ReadAsStringAsync();
                 var error = Newtonsoft.Json.JsonConvert.DeserializeObject<ErrorEnvelope>(text);
+                if (error == null && string.IsNullOrEmpty(message.ReasonPhrase))
+                {
+                    error = new ErrorEnvelope
+                    {
+                        Message = message.ReasonPhrase
+                    };
+                }
                 return error;
             }
             return null;
