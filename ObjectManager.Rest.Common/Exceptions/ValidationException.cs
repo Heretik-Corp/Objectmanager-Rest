@@ -6,4 +6,8 @@ namespace ObjectManager.Rest.Exceptions
     {
         public ValidationException(string message) : base(message) { }
     }
+    public class ReasonPhraseException : Exception
+    {
+        public ReasonPhraseException(string message) : base(message) { }
+    }
 }

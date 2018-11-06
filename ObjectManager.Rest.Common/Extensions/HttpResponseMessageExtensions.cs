@@ -22,6 +22,7 @@ namespace ObjectManager.Rest
                 {
                     error = new ErrorEnvelope
                     {
+                        ErrorType = "ReasonPhrase",
                         Message = message.ReasonPhrase
                     };
                 }
@@ -47,6 +48,10 @@ namespace ObjectManager.Rest
             else if (e.ErrorType == "Relativity.Services.Exceptions.ValidationException")
             {
                 return new ValidationException(e.Message);
+            }
+            else if (e.ErrorType == "ReasonPhrase")
+            {
+                return new ReasonPhraseException(e.Message);
             }
             var str = Newtonsoft.Json.JsonConvert.SerializeObject(e);
             return new System.Exception(str);
