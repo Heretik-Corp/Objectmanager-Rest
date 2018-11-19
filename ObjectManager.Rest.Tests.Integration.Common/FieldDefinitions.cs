@@ -28,6 +28,10 @@ namespace ObjectManager.Rest.Tests.Integration.Common
         public const string SingleObject = "F457B152-8FE3-4BA7-9E83-ADD88095EE8D";
         public const string MultiObject = "D449CD7D-8CD5-4F67-AD9F-7F8E1509356C";
     }
+    public class SingleObjectFieldDefinitions
+    {
+        public const string LongText = "08BFA5EF-8D6F-4FB5-A0D6-4BD4D10742EE";
+    }
 
     public class DocumentFieldDefinitions
     {

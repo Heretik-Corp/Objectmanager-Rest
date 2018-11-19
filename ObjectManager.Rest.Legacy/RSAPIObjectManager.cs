@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ObjectManager.Rest.Extensions;
@@ -34,6 +35,11 @@ namespace ObjectManager.Rest.Legacy
             }
         }
 
+        //private GenericRepository<T> GetRepo<T>(IRSAPIClient client) where T : kCura.Relativity.Client.DTOs.Artifact, new()
+        //{
+        //    return client.Repositories.Document;
+        //}
+
         public Task<ObjectUpdateResult> UpdateAsync(int workspaceId, RelativityObject obj, CallingContext context)
         {
             //TODO: manage repo based on objectType
@@ -49,6 +55,29 @@ namespace ObjectManager.Rest.Legacy
                 client.Repositories.Document.UpdateSingle(dto);
                 return Task.FromResult(new ObjectUpdateResult());
             }
+        }
+
+        public Task<RelativityObject> CreateAsync(int workspaceId, RelativityObject obj, CallingContext context)
+        {
+            if (obj.ObjectType == null || obj.ObjectType.ArtifactTypeID == 0)
+            {
+                throw new ArgumentException(ObjectManager.Rest.Properties.Messages.Object_Type_Missing);
+            }
+            return this.CreateInternalAsync(workspaceId, obj, context, default(CancellationToken));
+        }
+
+        public Task<RelativityObject> CreateAsync(int workspaceId, RelativityObject obj, CallingContext context, CancellationToken token)
+        {
+            if (obj.ObjectType == null || obj.ObjectType.ArtifactTypeID == 0)
+            {
+                throw new ArgumentException(ObjectManager.Rest.Properties.Messages.Object_Type_Missing);
+            }
+            return this.CreateInternalAsync(workspaceId, obj, context, default(CancellationToken));
+        }
+
+        public Task<RelativityObject> CreateInternalAsync(int workspaceId, RelativityObject obj, CallingContext context, CancellationToken token)
+        {
+            throw new NotImplementedException();
         }
     }
 }

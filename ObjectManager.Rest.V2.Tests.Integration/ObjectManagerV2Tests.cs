@@ -37,8 +37,6 @@ namespace ObjectManager.Rest.V2.Tests.Integration
             _manager = new ObjectManagerV2(_fixture.Helper.GetRestUrl(), new UsernamePasswordAuthentication(ConfigHelper.UserName, ConfigHelper.Password));
             _creation = new DocumentCreationSetupFixture(fixture.Helper);
             _installFixture = installFixture;
-
-            _creation.Create(_fixture.WorkspaceId, 1);
             _installFixture.Init(_fixture.WorkspaceId, ApplicationInstallContext.FieldTestPath);
         }
 
@@ -47,6 +45,7 @@ namespace ObjectManager.Rest.V2.Tests.Integration
         public async Task ReadAsync_SanityCheck()
         {
             //ARRANGE
+            _creation.Create(_fixture.WorkspaceId, 1);
 
             //ACT
             var result = await _manager.ReadAsync(_fixture.WorkspaceId, new Interfaces.RelativityObject
@@ -66,6 +65,7 @@ namespace ObjectManager.Rest.V2.Tests.Integration
         [Fact]
         public Task UpdateAsync_UpdateSingleChoiceByGuidUsingChoiceArtifactId_ReturnsSuccess()
         {
+            _creation.Create(_fixture.WorkspaceId, 1);
             return _manager.UpdateAsync_UpdateSingleChoiceByGuidUsingChoiceArtifactId_ReturnsSuccess(_fixture.Helper, _fixture.WorkspaceId, _creation.DocIds.First());
         }
 
@@ -74,6 +74,7 @@ namespace ObjectManager.Rest.V2.Tests.Integration
         {
             //ARRANGE
             var fieldGuid = Guid.Parse(DocumentFieldDefinitions.SingleChoice);
+            _creation.Create(_fixture.WorkspaceId, 1);
 
             //ACT
             var value = new ChoiceRef(Guid.Parse(SingleChoiceChoiceDefinitions.Single1));
@@ -96,6 +97,7 @@ namespace ObjectManager.Rest.V2.Tests.Integration
         [Fact]
         public Task UpdateAsync_UpdateSingleObjectByArtifactId_ReturnsSuccess()
         {
+            _creation.Create(_fixture.WorkspaceId, 1);
             return _manager.UpdateAsync_UpdateSingleObjectByArtifactId_ReturnsSuccess(_fixture.Helper, _fixture.WorkspaceId, _creation.DocIds.First());
         }
 
@@ -105,6 +107,7 @@ namespace ObjectManager.Rest.V2.Tests.Integration
         [Fact]
         public Task UpdateAsync_UpdateUserByArtifactId_ReturnsSuccess()
         {
+            _creation.Create(_fixture.WorkspaceId, 1);
             return _manager.UpdateAsync_UpdateUserByArtifactId_ReturnsSuccess(_fixture.Helper, _fixture.WorkspaceId, _creation.DocIds.First(), _fixture.UserName);
         }
         #endregion
@@ -113,6 +116,7 @@ namespace ObjectManager.Rest.V2.Tests.Integration
         [Fact]
         public Task UpdateAsync_UpdateMultiObjectByArtifactId_ReturnsSuccess()
         {
+            _creation.Create(_fixture.WorkspaceId, 1);
             return _manager.UpdateAsync_UpdateMultiObjectByArtifactId_ReturnsSuccess(_fixture.Helper, _fixture.WorkspaceId, _creation.DocIds.First());
         }
         #endregion
@@ -124,6 +128,7 @@ namespace ObjectManager.Rest.V2.Tests.Integration
         {
             //ARRANGE
             var fieldGuid = Guid.Parse(DocumentFieldDefinitions.Multichoice);
+            _creation.Create(_fixture.WorkspaceId, 1);
 
             //ACT
             var value = new List<ChoiceRef> {
@@ -147,6 +152,7 @@ namespace ObjectManager.Rest.V2.Tests.Integration
         [Fact]
         public Task UpdateAsync_UpdateMultiChoiceByGuidUsingChoiceArtifactId_ReturnsSuccess()
         {
+            _creation.Create(_fixture.WorkspaceId, 1);
             return _manager.UpdateAsync_UpdateMultiChoiceByGuidUsingChoiceArtifactId_ReturnsSuccess(_fixture.Helper, _fixture.WorkspaceId, _creation.DocIds.First());
         }
 
@@ -212,6 +218,7 @@ namespace ObjectManager.Rest.V2.Tests.Integration
         [Fact]
         public async Task UpdateAsync_CallingContextSetLayoutHasEventhandlerError_ReturnsCorrectStatus()
         {
+            _creation.Create(_fixture.WorkspaceId, 1);
             var result = await _manager.UpdateAsync_CallingContextSetLayoutHasEventhandlerError_ReturnsCorrectStatus(_fixture.Helper, _fixture.WorkspaceId, _creation.DocIds.First());
 
             //ASSERT
@@ -223,6 +230,7 @@ namespace ObjectManager.Rest.V2.Tests.Integration
         {
             //ARRANGE
             var fieldGuid = Guid.Parse(DocumentFieldDefinitions.LongText);
+            _creation.Create(_fixture.WorkspaceId, 1);
 
             //ACT
             var result = await _manager.ReadAsync_CallingContextSetLayoutHasPreload_ReturnsCorrectLoadedFields(_fixture.Helper, _fixture.WorkspaceId, _creation.DocIds.First());
@@ -241,6 +249,7 @@ namespace ObjectManager.Rest.V2.Tests.Integration
         public async Task UpdateAsync_UpdateFieldByArtifactId_ReturnsSuccess(string fieldGuidString, object value, object expected)
         {
             //ARRANGE
+            _creation.Create(_fixture.WorkspaceId, 1);
             var client = _fixture.Helper.GetServicesManager().CreateProxy<IRSAPIClient>(Relativity.API.ExecutionIdentity.System);
             client.APIOptions.WorkspaceID = _fixture.WorkspaceId;
 
@@ -269,6 +278,7 @@ namespace ObjectManager.Rest.V2.Tests.Integration
             //ARRANGE
             var client = _fixture.Helper.GetServicesManager().CreateProxy<IRSAPIClient>(Relativity.API.ExecutionIdentity.System);
             client.APIOptions.WorkspaceID = _fixture.WorkspaceId;
+            _creation.Create(_fixture.WorkspaceId, 1);
 
             var fieldGuid = Guid.Parse(fieldGuidString);
             var field = client.Repositories.Field.ReadSingle(fieldGuid);
@@ -285,6 +295,20 @@ namespace ObjectManager.Rest.V2.Tests.Integration
         }
 
         #endregion
+
+        [Fact]
+        public Task CreateAsync_SanityCheckRDO_ReturnsSuccess()
+        {
+            return _manager.CreateAsync_SanityCheckRDO_ReturnsSuccess(_fixture.Helper, _fixture.WorkspaceId, Guid.Parse(ObjectTypeGuids.SingleObject));
+        }
+
+        [Fact]
+        public Task CreateAsync_SanityCheckDocument_ReturnsSuccess()
+        {
+            return _manager.CreateAsync_SanityCheckDocument_ReturnsSuccess(_fixture.Helper, _fixture.WorkspaceId);
+        }
+
+
 
         public void Dispose()
         {
