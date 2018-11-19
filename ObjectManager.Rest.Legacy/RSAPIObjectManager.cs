@@ -77,13 +77,13 @@ namespace ObjectManager.Rest.Legacy
 
         public Task<ObjectCreateResult> CreateAsync(int workspaceId, RelativityObject obj, CallingContext context)
         {
-            ObjectTypeValidator.ValidateObjectType(obj);
+            ObjectTypeValidator.ValidateObjectTypeForCreate(obj);
             return this.CreateInternalAsync(workspaceId, obj, context, default(CancellationToken));
         }
 
         public Task<ObjectCreateResult> CreateAsync(int workspaceId, RelativityObject obj, CallingContext context, CancellationToken token)
         {
-            ObjectTypeValidator.ValidateObjectType(obj);
+            ObjectTypeValidator.ValidateObjectTypeForCreate(obj);
             return this.CreateInternalAsync(workspaceId, obj, context, default(CancellationToken));
         }
 
