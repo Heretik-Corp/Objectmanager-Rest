@@ -25,6 +25,31 @@ namespace ObjectManager.Rest.V2
             _authentication.SetHeaders(_request);
         }
 
+        #region Create
+        public Task<ObjectCreateResult> CreateAsync(int workspaceId, RelativityObject obj, CallingContext context)
+        {
+            ObjectTypeValidator.ValidateObjectType(obj);
+            return this.CreateInternalAsync(workspaceId, obj, context, default(CancellationToken));
+        }
+
+        public Task<ObjectCreateResult> CreateAsync(int workspaceId, RelativityObject obj, CallingContext context, CancellationToken token)
+        {
+            ObjectTypeValidator.ValidateObjectType(obj);
+            return this.CreateInternalAsync(workspaceId, obj, context, token);
+        }
+        private async Task<ObjectCreateResult> CreateInternalAsync(int workspaceId, RelativityObject obj, CallingContext context, CancellationToken token)
+        {
+            var request = RelativityObjectRestCreatePrep.Prep(obj, context);
+            var result = await _request.PostAsJsonAsync($"/Relativity.REST/api/Relativity.Objects/workspace/{workspaceId}/object/create", request);
+            var error = await result.EnsureSuccessAsync();
+            error.ThrowIfNotNull();
+            var ret = await result.Content.ReadAsAsync<ObjectCreateResult>();
+            return ret;
+        }
+
+        #endregion
+
+        #region Read
         public Task<RelativityObject> ReadAsync(int workspaceId, RelativityObject obj, CallingContext context)
         {
             return this.ReadAsync(workspaceId, obj, context, default(CancellationToken));
@@ -40,6 +65,9 @@ namespace ObjectManager.Rest.V2
             return ret.Object;
         }
 
+        #endregion
+
+        #region Update
         public Task<ObjectUpdateResult> UpdateAsync(int workspaceId, RelativityObject obj, CallingContext context)
         {
             return this.UpdateAsync(workspaceId, obj, context, default(CancellationToken));
@@ -61,5 +89,6 @@ namespace ObjectManager.Rest.V2
             var ret = await result.Content.ReadAsAsync<ObjectUpdateResult>();
             return ret;
         }
+        #endregion
     }
 }

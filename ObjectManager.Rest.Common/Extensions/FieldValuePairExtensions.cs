@@ -67,6 +67,15 @@ namespace ObjectManager.Rest.Extensions
             return choices;
         }
 
+        public static string ValueAsString(this FieldValuePair pair)
+        {
+            if (pair.Value == null)
+            {
+                return null;
+            }
+            return pair.Value.ToString();
+        }
+
         internal static bool IsEnumerableOf<T>(this object obj)
         {
             if (obj == null)
