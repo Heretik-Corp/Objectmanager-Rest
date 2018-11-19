@@ -38,8 +38,8 @@ namespace ObjectManager.Rest.V2.Tests.Integration
             _creation = new DocumentCreationSetupFixture(fixture.Helper);
             _installFixture = installFixture;
 
-            _creation.Create(_fixture.WorkspaceId, 1);
-            _installFixture.Init(_fixture.WorkspaceId, ApplicationInstallContext.FieldTestPath);
+            //_creation.Create(_fixture.WorkspaceId, 1);
+            //_installFixture.Init(_fixture.WorkspaceId, ApplicationInstallContext.FieldTestPath);
         }
 
         #region SanityChecks
@@ -212,7 +212,7 @@ namespace ObjectManager.Rest.V2.Tests.Integration
         [Fact]
         public async Task UpdateAsync_CallingContextSetLayoutHasEventhandlerError_ReturnsCorrectStatus()
         {
-            var result = await _manager.UpdateAsync_CallingContextSetLayoutHasEventhandlerError_ReturnsCorrectStatus(_fixture.Helper, _fixture.WorkspaceId, _creation.DocIds.First());
+            var result = await _manager.UpdateAsync_CallingContextSetLayoutHasEventhandlerError_ReturnsCorrectStatus(_fixture.Helper, _fixture.WorkspaceId, 1039924);
 
             //ASSERT
             Assert.Contains(result.EventHandlerStatuses, x => !x.Success);

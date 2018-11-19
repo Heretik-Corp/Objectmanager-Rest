@@ -10,6 +10,8 @@ namespace ObjectManager.Rest.Interfaces
         public int ArtifactId { get; set; }
         public IEnumerable<FieldValuePair> FieldValues { get; set; } = new List<FieldValuePair>();
 
+        public ObjectType ObjectType { get; set; }
+
         public FieldValuePair this[string fieldName]
         {
             get

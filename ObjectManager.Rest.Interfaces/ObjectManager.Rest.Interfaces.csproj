@@ -52,6 +52,7 @@
     <Compile Include="IObjectManager.cs" />
     <Compile Include="IObjectManagerFactory.cs" />
     <Compile Include="IRelativityVersionResolver.cs" />
+    <Compile Include="Models\ObjectType.cs" />
     <Compile Include="ObjectUpdateResult.cs" />
     <Compile Include="PageMode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
