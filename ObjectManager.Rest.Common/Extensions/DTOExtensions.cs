@@ -26,6 +26,11 @@ namespace ObjectManager.Rest.Extensions
             {
                 retDoc = new RDO(obj.ArtifactId);
             }
+            if (obj.ObjectType == null)
+            {
+                throw new ArgumentNullException("Object type property cannot be null.");
+            }
+            retDoc.ArtifactTypeID = obj.ObjectType.ArtifactTypeId;
             retDoc.Fields = obj.FieldValues.Select(x => ToFieldValue(x)).ToList();
             return retDoc;
         }

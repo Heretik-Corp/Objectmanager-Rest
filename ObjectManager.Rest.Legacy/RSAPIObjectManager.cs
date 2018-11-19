@@ -36,12 +36,14 @@ namespace ObjectManager.Rest.Legacy
                     var dto = obj.ToDTODocument();
                     var result = client.Repositories.Document.Read(dto).EnsureSuccess();
                     var resultObject = result.First().ToRelativityObject();
+                    return Task.FromResult(resultObject);
                 }
                 else if (objectTypeId >= 1_000_000)
                 {
                     var dto = obj.ToRDODocument();
                     var result = client.Repositories.RDO.Read(dto).EnsureSuccess();
                     var resultObject = result.First().ToRelativityObject();
+                    return Task.FromResult(resultObject);
                 }
                 throw new NotSupportedException($"Object Type {objectTypeId} is not supported for Read.");
             }
