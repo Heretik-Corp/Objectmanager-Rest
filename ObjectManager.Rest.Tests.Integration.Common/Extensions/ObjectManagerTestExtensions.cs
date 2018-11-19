@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using kCura.Relativity.Client;
@@ -293,6 +294,26 @@ namespace ObjectManager.Rest.Tests.Integration.Common.Extensions
         }
 
         #endregion
+
+        public static Task CreateAsync_SanityCheckRDO_ReturnsSuccess(this IObjectManager manager, IHelper helper, int workspaceId, Guid objectTypeGuid)
+        {
+            var dbContext = helper.GetDBContext(workspaceId);
+            var sql = "";
+            var objectTypeId = dbContext.ExecuteSqlStatementAsScalar<int?>(sql, new[] { new SqlParameter("@guid", objectTypeGuid) });
+            return CreateAsync_SanityCheckObjectType(manager, helper, workspaceId, objectTypeId.Value);
+        }
+
+        public static Task CreateAsync_SanityCheckDocument_ReturnsSuccess(this IObjectManager manager, IHelper helper, int workspaceId)
+        {
+            return CreateAsync_SanityCheckObjectType(manager, helper, workspaceId, 10);
+        }
+
+
+        private static Task CreateAsync_SanityCheckObjectType(IObjectManager manager, IHelper helper, int workspaceId, int objectTypeId)
+        {
+            var artifact = SharedTestCases.CreateTestObject(null, new FieldRef(Guid.Parse(SingleObjectFieldDefinitions.LongText)), "Asdf", objectTypeId);
+            return manager.CreateAsync(workspaceId, artifact, null);
+        }
 
     }
 }

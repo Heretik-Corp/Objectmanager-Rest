@@ -1,10 +1,11 @@
-﻿using kCura.Relativity.Client;
-using kCura.Relativity.Client.DTOs;
-using Relativity.API;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
+using kCura.Relativity.Client;
+using kCura.Relativity.Client.DTOs;
+using Relativity.API;
 
 namespace ObjectManager.Rest.Tests.Integration.Common.TestFixtures
 {
@@ -51,10 +52,13 @@ namespace ObjectManager.Rest.Tests.Integration.Common.TestFixtures
         {
             if (this.DocIds?.Any() ?? false)
             {
-                using (var client = _helper.GetServicesManager().CreateProxy<IRSAPIClient>(ExecutionIdentity.System))
+                Task.Factory.StartNew(() =>
                 {
-                    client.Repositories.Document.Delete(this.DocIds.ToArray());
-                }
+                    using (var client = _helper.GetServicesManager().CreateProxy<IRSAPIClient>(ExecutionIdentity.System))
+                    {
+                        client.Repositories.Document.Delete(this.DocIds.ToArray());
+                    }
+                });
             }
         }
     }

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ObjectManager.Rest.Extensions;
@@ -58,12 +59,25 @@ namespace ObjectManager.Rest.Legacy
 
         public Task<RelativityObject> CreateAsync(int workspaceId, RelativityObject obj, CallingContext context)
         {
-            throw new System.NotImplementedException();
+            if (obj.ObjectType == null || obj.ObjectType.ArtifactTypeID == 0)
+            {
+                throw new ArgumentException(ObjectManager.Rest.Properties.Messages.Object_Type_Missing);
+            }
+            return this.CreateInternalAsync(workspaceId, obj, context, default(CancellationToken));
         }
 
         public Task<RelativityObject> CreateAsync(int workspaceId, RelativityObject obj, CallingContext context, CancellationToken token)
         {
-            throw new System.NotImplementedException();
+            if (obj.ObjectType == null || obj.ObjectType.ArtifactTypeID == 0)
+            {
+                throw new ArgumentException(ObjectManager.Rest.Properties.Messages.Object_Type_Missing);
+            }
+            return this.CreateInternalAsync(workspaceId, obj, context, default(CancellationToken));
+        }
+
+        public Task<RelativityObject> CreateInternalAsync(int workspaceId, RelativityObject obj, CallingContext context, CancellationToken token)
+        {
+            throw new NotImplementedException();
         }
     }
 }

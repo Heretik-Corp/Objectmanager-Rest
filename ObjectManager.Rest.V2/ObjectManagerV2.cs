@@ -31,7 +31,7 @@ namespace ObjectManager.Rest.V2
         {
             if (obj.ObjectType == null || obj.ObjectType.ArtifactTypeID == 0)
             {
-                throw new ArgumentException("Cannot create artifact with no ObjectType Id.");
+                throw new ArgumentException(ObjectManager.Rest.Properties.Messages.Object_Type_Missing);
             }
             return this.CreateInternalAsync(workspaceId, obj, context, default(CancellationToken));
         }
@@ -40,7 +40,7 @@ namespace ObjectManager.Rest.V2
         {
             if (obj.ObjectType == null || obj.ObjectType.ArtifactTypeID == 0)
             {
-                throw new ArgumentException("Cannot create artifact with no ObjectType Id.");
+                throw new ArgumentException(ObjectManager.Rest.Properties.Messages.Object_Type_Missing);
             }
             return this.CreateInternalAsync(workspaceId, obj, context, token);
         }
