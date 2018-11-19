@@ -61,6 +61,15 @@ namespace ObjectManager.Rest.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Document_Type_Not_Supported_For_Create {
+            get {
+                return ResourceManager.GetString("Document_Type_Not_Supported_For_Create", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cannot create artifact with no ObjectType Id..
         /// </summary>
         internal static string Object_Type_Missing {

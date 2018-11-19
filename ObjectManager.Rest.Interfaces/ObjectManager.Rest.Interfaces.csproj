@@ -45,6 +45,7 @@
     <Compile Include="Authentication\IAuthentication.cs" />
     <Compile Include="Authentication\UsernamePasswordAuthentication.cs" />
     <Compile Include="CallingContext.cs" />
+    <Compile Include="EventHandlerStatus.cs" />
     <Compile Include="LayoutRef.cs" />
     <Compile Include="Models\ChoiceRef.cs" />
     <Compile Include="Models\FieldRef.cs" />
@@ -53,6 +54,7 @@
     <Compile Include="IObjectManagerFactory.cs" />
     <Compile Include="IRelativityVersionResolver.cs" />
     <Compile Include="Models\ObjectType.cs" />
+    <Compile Include="ObjectCreateResult.cs" />
     <Compile Include="ObjectUpdateResult.cs" />
     <Compile Include="PageMode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

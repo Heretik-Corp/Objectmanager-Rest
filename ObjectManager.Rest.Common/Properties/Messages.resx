@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Document_Type_Not_Supported_For_Create" xml:space="preserve">
+    <value />
+  </data>
   <data name="Object_Type_Missing" xml:space="preserve">
     <value>Cannot create artifact with no ObjectType Id.</value>
   </data>

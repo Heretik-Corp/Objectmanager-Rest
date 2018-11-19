@@ -1,5 +1,4 @@
-﻿using System;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
@@ -27,31 +26,25 @@ namespace ObjectManager.Rest.V2
         }
 
         #region Create
-        public Task<RelativityObject> CreateAsync(int workspaceId, RelativityObject obj, CallingContext context)
+        public Task<ObjectCreateResult> CreateAsync(int workspaceId, RelativityObject obj, CallingContext context)
         {
-            if (obj.ObjectType == null || obj.ObjectType.ArtifactTypeID == 0)
-            {
-                throw new ArgumentException(ObjectManager.Rest.Properties.Messages.Object_Type_Missing);
-            }
+            ObjectTypeValidator.ValidateObjectType(obj);
             return this.CreateInternalAsync(workspaceId, obj, context, default(CancellationToken));
         }
 
-        public Task<RelativityObject> CreateAsync(int workspaceId, RelativityObject obj, CallingContext context, CancellationToken token)
+        public Task<ObjectCreateResult> CreateAsync(int workspaceId, RelativityObject obj, CallingContext context, CancellationToken token)
         {
-            if (obj.ObjectType == null || obj.ObjectType.ArtifactTypeID == 0)
-            {
-                throw new ArgumentException(ObjectManager.Rest.Properties.Messages.Object_Type_Missing);
-            }
+            ObjectTypeValidator.ValidateObjectType(obj);
             return this.CreateInternalAsync(workspaceId, obj, context, token);
         }
-        private async Task<RelativityObject> CreateInternalAsync(int workspaceId, RelativityObject obj, CallingContext context, CancellationToken token)
+        private async Task<ObjectCreateResult> CreateInternalAsync(int workspaceId, RelativityObject obj, CallingContext context, CancellationToken token)
         {
-            var request = RelativityObjectRestReadPrep.Prep(obj, context);
+            var request = RelativityObjectRestCreatePrep.Prep(obj, context);
             var result = await _request.PostAsJsonAsync($"/Relativity.REST/api/Relativity.Objects/workspace/{workspaceId}/object/create", request);
             var error = await result.EnsureSuccessAsync();
             error.ThrowIfNotNull();
-            var ret = await result.Content.ReadAsAsync<ReadResult>();
-            return ret.Object;
+            var ret = await result.Content.ReadAsAsync<ObjectCreateResult>();
+            return ret;
         }
 
         #endregion

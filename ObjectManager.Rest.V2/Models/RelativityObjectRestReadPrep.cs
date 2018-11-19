@@ -11,14 +11,13 @@ namespace ObjectManager.Rest.V2.Models
         public int ArtifactId { get; set; }
     }
 
-    internal class RelativityObjectRestReadPrep
+    internal partial class RelativityObjectRestReadPrep
     {
         internal class RequestObj
         {
             public RestObject Object { get; set; }
             public IEnumerable<object> Fields { get; set; }
         }
-
 
         public RequestObj Request { get; set; }
         public OperationOptionsRequest OperationOptions { get; set; }

@@ -25,7 +25,7 @@ namespace ObjectManager.Rest.Tests.Integration.Common
             {
                 obj.ObjectType = new ObjectType
                 {
-                    ArtifactTypeID = objectTypeId.Value
+                    ArtifactTypeId = objectTypeId.Value
                 };
             }
             return obj;

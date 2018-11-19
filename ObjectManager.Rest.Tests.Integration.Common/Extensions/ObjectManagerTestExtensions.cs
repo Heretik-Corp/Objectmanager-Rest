@@ -295,25 +295,40 @@ namespace ObjectManager.Rest.Tests.Integration.Common.Extensions
 
         #endregion
 
-        public static Task CreateAsync_SanityCheckRDO_ReturnsSuccess(this IObjectManager manager, IHelper helper, int workspaceId, Guid objectTypeGuid)
+        public static async Task CreateAsync_SanityCheckRDO_ReturnsSuccess(this IObjectManager manager, IHelper helper, int workspaceId, Guid objectTypeGuid)
         {
+            //ARRANGE
+            var fieldGuid = Guid.Parse(SingleObjectFieldDefinitions.LongText);
+            var fieldValue = "Asdf";
             var dbContext = helper.GetDBContext(workspaceId);
-            var sql = "";
+            var sql = "select o.[DescriptorArtifactTypeID] from [eddsdbo].[ObjectType] o join [eddsdbo].[ArtifactGuid] ag on o.artifactId = ag.ArtifactID where ag.ArtifactGuid = @guid";
             var objectTypeId = dbContext.ExecuteSqlStatementAsScalar<int?>(sql, new[] { new SqlParameter("@guid", objectTypeGuid) });
-            return CreateAsync_SanityCheckObjectType(manager, helper, workspaceId, objectTypeId.Value);
+
+            var artifact = SharedTestCases.CreateTestObject(null, new FieldRef(fieldGuid), fieldValue, objectTypeId);
+
+            //ACT
+            var result = await manager.CreateAsync(workspaceId, artifact, null);
+            artifact.ArtifactId = result.Object.ArtifactId;
+            var readResult = await manager.ReadAsync(workspaceId, artifact, null);
+
+            //ASSERT
+            Assert.Equal(fieldValue, result.Object[fieldGuid].ValueAsString());
         }
 
-        public static Task CreateAsync_SanityCheckDocument_ReturnsSuccess(this IObjectManager manager, IHelper helper, int workspaceId)
+        public static async Task CreateAsync_SanityCheckDocument_ReturnsSuccess(this IObjectManager manager, IHelper helper, int workspaceId)
         {
-            return CreateAsync_SanityCheckObjectType(manager, helper, workspaceId, 10);
+            //ARRANGE
+            var fieldGuid = Guid.Parse(DocumentFieldDefinitions.LongText);
+            var fieldValue = "Asdf";
+            var artifact = SharedTestCases.CreateTestObject(null, new FieldRef(fieldGuid), fieldValue, 10);
+
+            //ACT
+            var result = await manager.CreateAsync(workspaceId, artifact, null);
+            artifact.ArtifactId = result.Object.ArtifactId;
+            var readResult = await manager.ReadAsync(workspaceId, artifact, null);
+
+            //ASSERT
+            Assert.Equal(fieldValue, result.Object[fieldGuid].ValueAsString());
         }
-
-
-        private static Task CreateAsync_SanityCheckObjectType(IObjectManager manager, IHelper helper, int workspaceId, int objectTypeId)
-        {
-            var artifact = SharedTestCases.CreateTestObject(null, new FieldRef(Guid.Parse(SingleObjectFieldDefinitions.LongText)), "Asdf", objectTypeId);
-            return manager.CreateAsync(workspaceId, artifact, null);
-        }
-
     }
 }

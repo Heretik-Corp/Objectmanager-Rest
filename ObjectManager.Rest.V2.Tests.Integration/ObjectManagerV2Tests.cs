@@ -296,6 +296,7 @@ namespace ObjectManager.Rest.V2.Tests.Integration
 
         #endregion
 
+        #region Create
         [Fact]
         public Task CreateAsync_SanityCheckRDO_ReturnsSuccess()
         {
@@ -308,7 +309,7 @@ namespace ObjectManager.Rest.V2.Tests.Integration
             return _manager.CreateAsync_SanityCheckDocument_ReturnsSuccess(_fixture.Helper, _fixture.WorkspaceId);
         }
 
-
+        #endregion
 
         public void Dispose()
         {

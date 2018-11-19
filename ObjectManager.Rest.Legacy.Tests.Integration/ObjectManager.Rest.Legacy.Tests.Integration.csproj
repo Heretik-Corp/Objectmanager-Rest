@@ -43,6 +43,9 @@
     <Reference Include="kCura.Config, Version=9.5.89.76, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Relativity.Other.9.5.89.76\lib\kCura.Config.dll</HintPath>
     </Reference>
+    <Reference Include="kCura.Crypto">
+      <HintPath>..\lib\kCura\kCura.Crypto.dll</HintPath>
+    </Reference>
     <Reference Include="kCura.Data.RowDataGateway, Version=9.5.89.76, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Relativity.Other.9.5.89.76\lib\kCura.Data.RowDataGateway.dll</HintPath>
     </Reference>

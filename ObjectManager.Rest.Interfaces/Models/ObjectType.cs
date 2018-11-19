@@ -2,6 +2,6 @@
 {
     public class ObjectType
     {
-        public int ArtifactTypeID { get; set; }
+        public int ArtifactTypeId { get; set; }
     }
 }

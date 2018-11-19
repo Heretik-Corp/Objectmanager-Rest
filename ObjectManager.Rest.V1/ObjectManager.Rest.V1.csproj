@@ -68,6 +68,7 @@
     <Compile Include="Models\ReadResult.cs" />
     <Compile Include="Models\RelativityObject.cs" />
     <Compile Include="Models\RelativityObjectRestReadPrep.cs" />
+    <Compile Include="Models\RelativityObjectCreateRestPrep.cs" />
     <Compile Include="Models\RelativityObjectUpdateRestPrep.cs" />
     <Compile Include="ObjectManagerV1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

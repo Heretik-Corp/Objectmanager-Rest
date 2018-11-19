@@ -52,6 +52,7 @@
     <Compile Include="Extensions\FieldValuePairExtensions.cs" />
     <Compile Include="Extensions\HttpResponseMessageExtensions.cs" />
     <Compile Include="Exceptions\ValidationException.cs" />
+    <Compile Include="ObjectTypeValidator.cs" />
     <Compile Include="Properties\Messages.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

@@ -12,12 +12,22 @@ namespace ObjectManager.Rest.Extensions
     {
 
 
-        public static RelativityObject ToRelativityObject(this Document doc)
+        public static RelativityObject ToRelativityObject(this Artifact doc)
         {
             var obj = new RelativityObject();
             obj.ArtifactId = doc.ArtifactID;
             obj.FieldValues = doc.Fields.Select(x => ToFieldPair(x)).ToList();
             return obj;
+        }
+        public static RDO ToRDODocument(this RelativityObject obj)
+        {
+            var retDoc = new RDO();
+            if (obj.ArtifactId > 0)
+            {
+                retDoc = new RDO(obj.ArtifactId);
+            }
+            retDoc.Fields = obj.FieldValues.Select(x => ToFieldValue(x)).ToList();
+            return retDoc;
         }
 
         public static Document ToDTODocument(this RelativityObject doc)
