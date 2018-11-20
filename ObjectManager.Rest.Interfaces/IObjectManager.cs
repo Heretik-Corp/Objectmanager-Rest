@@ -9,5 +9,7 @@ namespace ObjectManager.Rest.Interfaces
         Task<ObjectUpdateResult> UpdateAsync(int workspaceId, RelativityObject obj, CallingContext context, CancellationToken token);
         Task<RelativityObject> ReadAsync(int workspaceId, RelativityObject obj, CallingContext context);
         Task<RelativityObject> ReadAsync(int workspaceId, RelativityObject obj, CallingContext context, CancellationToken token);
+        Task<ObjectCreateResult> CreateAsync(int workspaceId, RelativityObject obj, CallingContext context);
+        Task<ObjectCreateResult> CreateAsync(int workspaceId, RelativityObject obj, CallingContext context, CancellationToken token);
     }
 }

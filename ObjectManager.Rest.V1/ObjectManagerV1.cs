@@ -64,5 +64,42 @@ namespace ObjectManager.Rest.V1
             var ret = await result.Content.ReadAsAsync<ReadResult>();
             return ret.RelativityObject.ToCoreModel();
         }
+
+        public Task<ObjectCreateResult> CreateAsync(int workspaceId, RelativityObject obj, CallingContext context)
+        {
+            ObjectTypeValidator.ValidateObjectTypeForCreate(obj);
+            return this.CreateInternalAsync(workspaceId, obj, context, default(CancellationToken));
+        }
+
+        public Task<ObjectCreateResult> CreateAsync(int workspaceId, RelativityObject obj, CallingContext context, CancellationToken token)
+        {
+            ObjectTypeValidator.ValidateObjectTypeForCreate(obj);
+            return this.CreateInternalAsync(workspaceId, obj, context, token);
+        }
+
+        private async Task<ObjectCreateResult> CreateInternalAsync(int workspaceId, RelativityObject obj, CallingContext context, CancellationToken token)
+        {
+            var request = RelativityObjectCreateRestPrep.Prep(obj);
+            var result = await _request.PostAsJsonAsync($"{BASE_PATH}/{workspaceId}/objects/create", new
+            {
+                RelativityObject = request,
+                CallingContext = context
+            }, token);
+            var error = await result.EnsureSuccessAsync();
+            try
+            {
+                error.ThrowIfNotNull();
+            }
+            catch (EventHandlerFailedException ehfe)
+            {
+                return new ObjectCreateResult(ehfe.Message);
+            }
+            var ret = await result.Content.ReadAsAsync<ReadResult>();
+            return new ObjectCreateResult
+            {
+                Object = ret.RelativityObject.ToCoreModel(),
+                EventHandlerStatuses = ret.EventHandlerStatuses
+            };
+        }
     }
 }

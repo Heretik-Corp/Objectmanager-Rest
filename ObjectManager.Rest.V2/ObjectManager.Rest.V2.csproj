@@ -134,6 +134,7 @@
   <ItemGroup>
     <Compile Include="Models\ReadResult.cs" />
     <Compile Include="Models\RelativityObjectRestReadPrep.cs" />
+    <Compile Include="Models\RelativityObjectRestCreatePrep.cs" />
     <Compile Include="Models\RelativityObjectUpdateRestPrep.cs" />
     <Compile Include="ObjectManagerV2.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

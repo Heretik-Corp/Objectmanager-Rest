@@ -276,6 +276,21 @@ namespace ObjectManager.Rest.V1.Tests.Integration.Manager
 
         #endregion
 
+        #region Create
+        [Fact]
+        public Task CreateAsync_SanityCheckRDO_ReturnsSuccess()
+        {
+            return _manager.CreateAsync_SanityCheckRDO_ReturnsSuccess(_fixture.Helper, _fixture.WorkspaceId, Guid.Parse(ObjectTypeGuids.SingleObject));
+        }
+
+        [Fact]
+        public Task CreateAsync_SanityCheckDocument_ReturnsSuccess()
+        {
+            return _manager.CreateAsync_SanityCheckDocument_ReturnsSuccess(_fixture.Helper, _fixture.WorkspaceId);
+        }
+
+        #endregion
+
         public void Dispose()
         {
             _creation?.Dispose();
