@@ -11,11 +11,14 @@ namespace ObjectManager.Rest.Extensions
     public static class DTOExtensions
     {
 
-
         public static RelativityObject ToRelativityObject(this Artifact doc)
         {
             var obj = new RelativityObject();
             obj.ArtifactId = doc.ArtifactID;
+            if (doc.ArtifactTypeID.HasValue)
+            {
+                obj.ObjectType = new Interfaces.ObjectType(doc.ArtifactTypeID.Value);
+            }
             obj.FieldValues = doc.Fields.Select(x => ToFieldPair(x)).ToList();
             return obj;
         }

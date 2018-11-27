@@ -23,10 +23,7 @@ namespace ObjectManager.Rest.Tests.Integration.Common
             };
             if (objectTypeId.HasValue)
             {
-                obj.ObjectType = new ObjectType
-                {
-                    ArtifactTypeId = objectTypeId.Value
-                };
+                obj.ObjectType = new ObjectType(objectTypeId.Value);
             }
             return obj;
         }
