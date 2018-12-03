@@ -22,7 +22,7 @@ namespace ObjectManager.Rest.Extensions
             obj.FieldValues = doc.Fields.Select(x => ToFieldPair(x)).ToList();
             return obj;
         }
-        public static RDO ToRDODocument(this RelativityObject obj)
+        public static RDO ToRDO(this RelativityObject obj)
         {
             var retDoc = new RDO();
             if (obj.ArtifactId > 0)
