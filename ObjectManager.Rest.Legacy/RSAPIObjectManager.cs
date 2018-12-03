@@ -41,7 +41,7 @@ namespace ObjectManager.Rest.Legacy
                 else if (objectTypeId >= 1_000_000)
                 {
                     obj.ObjectType = new ObjectType(objectTypeId);
-                    var dto = obj.ToRDODocument();
+                    var dto = obj.ToRDO();
                     var result = client.Repositories.RDO.Read(dto).EnsureSuccess();
                     var resultObject = result.First().ToRelativityObject();
                     return Task.FromResult(resultObject);
@@ -69,7 +69,7 @@ namespace ObjectManager.Rest.Legacy
                 }
                 else if (objectTypeId >= 1_000_000)
                 {
-                    var dto = obj.ToRDODocument();
+                    var dto = obj.ToRDO();
                     client.Repositories.RDO.UpdateSingle(dto);
                 }
                 return Task.FromResult(new ObjectUpdateResult());
@@ -97,7 +97,7 @@ namespace ObjectManager.Rest.Legacy
                 client.APIOptions.WorkspaceID = workspaceId;
                 if (objectTypeId >= 1_000_000)
                 {
-                    var dto = obj.ToRDODocument();
+                    var dto = obj.ToRDO();
                     var resultId = client.Repositories.RDO.CreateSingle(dto);
                     obj.ArtifactId = resultId;
                 }
