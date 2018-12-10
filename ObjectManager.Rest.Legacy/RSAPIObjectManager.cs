@@ -69,6 +69,7 @@ namespace ObjectManager.Rest.Legacy
                 }
                 else if (objectTypeId >= 1_000_000)
                 {
+                    obj.ObjectType = new ObjectType(objectTypeId);
                     var dto = obj.ToRDO();
                     client.Repositories.RDO.UpdateSingle(dto);
                 }
