@@ -84,7 +84,7 @@ namespace ObjectManager.Rest.Common.Tests.Unit
             var result = _parser.ParseValue(date);
 
             //ASSERT
-            Assert.Equal(date.ToString("yyyy-MM-ddTHH:mm:ss.ffZ"), result);
+            Assert.Equal(date.ToString("yyyy-MM-ddTHH:mm:ss.ff"), result);
         }
 
         [Fact]

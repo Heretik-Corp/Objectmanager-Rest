@@ -61,7 +61,7 @@ namespace ObjectManager.Rest
             }
             else if (value is DateTime)
             {
-                return ((DateTime)value).ToString("yyyy-MM-ddTHH:mm:ss.ffZ");
+                return ((DateTime)value).ToString("yyyy-MM-ddTHH:mm:ss.ff");
             }
             else if (value is RelativityObject)
             {
