@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using ObjectManager.Rest.Exceptions;
 
@@ -41,20 +42,34 @@ namespace ObjectManager.Rest
 
         private static Exception ParseError(ErrorEnvelope e)
         {
-            if (e.ErrorType == "Relativity.Services.Objects.Exceptions.EventHandlerFailedException")
+            var sb = new StringBuilder();
+            try
             {
-                return new EventHandlerFailedException(e.Message);
+                if (e.ErrorType == "Relativity.Services.Objects.Exceptions.EventHandlerFailedException")
+                {
+                    sb.AppendLine("Running::Relativity.Services.Objects.Exceptions.EventHandlerFailedException");
+                    return new EventHandlerFailedException(e.Message);
+                }
+                else if (e.ErrorType == "Relativity.Services.Exceptions.ValidationException")
+                {
+                    sb.AppendLine("Running::Relativity.Services.Exceptions.ValidationException");
+                    return new ValidationException(e.Message);
+                }
+                else if (e.ErrorType == "ReasonPhrase")
+                {
+                    sb.AppendLine("Running::ReasonPhrase");
+                    return new ReasonPhraseException(e.Message);
+                }
+                sb.AppendLine("SerializeObject");
+                var str = Newtonsoft.Json.JsonConvert.SerializeObject(e);
+                sb.AppendLine("DONE: SerializeObject");
+                sb.AppendLine(str);
+                return new System.Exception(str);
             }
-            else if (e.ErrorType == "Relativity.Services.Exceptions.ValidationException")
+            catch(Exception exp)
             {
-                return new ValidationException(e.Message);
+                throw new Exception(sb.ToString(), exp);
             }
-            else if (e.ErrorType == "ReasonPhrase")
-            {
-                return new ReasonPhraseException(e.Message);
-            }
-            var str = Newtonsoft.Json.JsonConvert.SerializeObject(e);
-            return new System.Exception(str);
         }
     }
 }
