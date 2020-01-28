@@ -48,7 +48,8 @@ namespace ObjectManager.Rest.V2
                 var request = RelativityObjectRestCreatePrep.Prep(obj, context);
                 sb.AppendLine("request");
                 var result = await _request.PostAsJsonAsync($"/Relativity.REST/api/Relativity.Objects/workspace/{workspaceId}/object/create", request);
-                sb.AppendLine("Result");
+                var ret2 = await result.Content.ReadAsStringAsync();
+                sb.AppendLine($"Result {result.StatusCode} :: {Newtonsoft.Json.JsonConvert.SerializeObject(ret2)}");
                 var error = await result.EnsureSuccessAsync();
                 sb.AppendLine("error");
                 error.ThrowIfNotNull();

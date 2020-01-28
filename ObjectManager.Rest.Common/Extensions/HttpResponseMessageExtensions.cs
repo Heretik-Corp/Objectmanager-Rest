@@ -33,10 +33,17 @@ namespace ObjectManager.Rest
         }
         public static void ThrowIfNotNull(this ErrorEnvelope e)
         {
-            if (e != null)
+            try
             {
-                var ex = ParseError(e);
-                throw ex;
+                if (e != null)
+                {
+                    var ex = ParseError(e);
+                    throw ex;
+                }
+            }
+            catch (Exception exp)
+            {
+                throw new Exception("Throw if not null", exp);
             }
         }
 
@@ -66,7 +73,7 @@ namespace ObjectManager.Rest
                 sb.AppendLine(str);
                 return new System.Exception(str);
             }
-            catch(Exception exp)
+            catch (Exception exp)
             {
                 throw new Exception(sb.ToString(), exp);
             }
