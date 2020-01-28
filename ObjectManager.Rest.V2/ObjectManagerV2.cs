@@ -1,5 +1,7 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using ObjectManager.Rest.Exceptions;
@@ -39,12 +41,26 @@ namespace ObjectManager.Rest.V2
         }
         private async Task<ObjectCreateResult> CreateInternalAsync(int workspaceId, RelativityObject obj, CallingContext context, CancellationToken token)
         {
-            var request = RelativityObjectRestCreatePrep.Prep(obj, context);
-            var result = await _request.PostAsJsonAsync($"/Relativity.REST/api/Relativity.Objects/workspace/{workspaceId}/object/create", request);
-            var error = await result.EnsureSuccessAsync();
-            error.ThrowIfNotNull();
-            var ret = await result.Content.ReadAsAsync<ObjectCreateResult>();
-            return ret;
+            var sb = new StringBuilder();
+            try
+            {
+                sb.AppendLine("Start");
+                var request = RelativityObjectRestCreatePrep.Prep(obj, context);
+                sb.AppendLine("request");
+                var result = await _request.PostAsJsonAsync($"/Relativity.REST/api/Relativity.Objects/workspace/{workspaceId}/object/create", request);
+                sb.AppendLine("Result");
+                var error = await result.EnsureSuccessAsync();
+                sb.AppendLine("error");
+                error.ThrowIfNotNull();
+                sb.AppendLine("throw");
+                var ret = await result.Content.ReadAsAsync<ObjectCreateResult>();
+                sb.AppendLine("ret");
+                return ret;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(sb.ToString(), e);
+            }
         }
 
         #endregion
